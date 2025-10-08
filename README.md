@@ -15,6 +15,7 @@ A private AI ChatBot
 
 - [Chapter.16_Web_Development.pdf](https://itinstructor.github.io/WNCCComputerScience/Python/Web_Development/Chapter.16_Web_Development.pdf)
 - [Flask Unit Converter](https://itinstructor.github.io/WNCCComputerScience/Python/Web_Development/Flask_Unit_Converter.pdf)
+- [Flask Blog Tutorial](https://itinstructor.github.io/WNCCComputerScience/Python/Web_Development/Python_Flask_Blog_Tutorial.pdf)
 
 ## AI Private ChatBot Research
 
