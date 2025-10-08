@@ -4,12 +4,11 @@ A private AI ChatBot
 
 ## Team Members
 
-- Owen Osmera
+- Elizier Lamen
 - Christi Pendergraft
 - Joe Scott
 - Caleb Stewart
 - Shawn Noon
-- Elizier Lamen
 
 ## Flask Tutorials
 
