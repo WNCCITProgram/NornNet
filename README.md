@@ -66,6 +66,7 @@ The implementation is split into phases so the team can ship incrementally.
 2. Extract the zip file --> place all files in c:\ollama
 3. Add to system environment variables: c:\ollama
 4. Verify installation: Open a Command Prompt:
+5. Verify that gemma3:4b is installed as the model
 
    ```ollama --version```
 
