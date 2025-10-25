@@ -70,7 +70,7 @@ The implementation is split into phases so the team can ship incrementally.
 
 5. Pull a Model to test with:
   
-    ```ollama pull llama3.1```
+    ```ollama pull gemma 3:4b```
 
 ### ✅ Set Up Ollama as a Windows Service (using NSSM)
 
@@ -139,6 +139,7 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 - Create `main_app.py` with routes for the homepage (`/`) and chat (`/chat`).
 - Build `index.html` with a chat history, input, and send button.
 - Implement minimal CSS to make the UI usable.
+- Download the student handbook onto the server for the AI to reference
 - Create virtual environment
   - Install python ollama library:
 
@@ -346,56 +347,3 @@ A very simple website that displays a new, random quote each day.
   - **Students 1 & 2 (Backend & Database)**: Create a `Quote` model (text, author). Write the main route that selects a random quote from the database and passes it to the template.
   - **Students 3 & 4 (Admin Panel)**: Build a simple form and route for an admin to add new quotes.
   - **Students 5 & 6 (Frontend)**: Design a visually appealing homepage to display the quote of the day.
-
-
-## Project Names for Future Projects
-
-- OdinChat – wise and all-seeing.
-- LokiTalk – mischievous and clever, perfect for a witty assistant.
-- FenrirBot – fierce and untamed, for a bold AI.
-- ValhallaTalk – epic and heroic, for a grand assistant.
-- NornNet – named after the fates who weave destiny.
-- AsgardAI – the realm of the gods, lofty and powerful. 
-
-Project Ragnarok: While Ragnarok is the "end of the world," in a project context it can signify the final, ultimate version of a build or a stress-testing application designed to push a system to its limits.
-
-1. OdinCode- All-seeing god meets all-seeing code.
-2. ThorByte - Hammering out powerful code and projects.
-3. LokiLogic - Clever, unpredictable algorithms and coding.
-4. ValhallaDev - A heaven for developers and their code.
-5. AsgardianTech - Divine tech from the realm of the gods.
-6. FreyaStack - Beauty and brains in full-stack development.
-7. MjolnirLabs - Where code hits like a thunderbolt.
-8. YggdrasilNet - The tree that connects all systems—like your project architecture.
-9. HeimdallHub - The guardian of gateways (perfect for network-related projects).
-10. TyrScripts - Justice in clean, efficient scripting.
-11. RunicCode - Ancient runes meet modern syntax.
-12. NorseNode - A network or idea node with mythic roots.
-13. BifrostBridge - Bridging users and data like the rainbow bridge.
-14. OdinWare - Software that sees all, like the Allfather.
-15. FrostGiant.dev - Big ideas, colder execution. Great for back-end-heavy projects.
-16. SagaSys - Every project tells a saga. Ideal for system design.
-17. RagnarokAI - Where machine learning meets the end of the old world.
-18. NornNet - The Norns wove fate; you weave networks.
-19. SkadiSoft - Precision and cold beauty in user interface.
-20. FenrirCode - Unleashing wild and powerful code—best for disruptive apps.
-21. AsgardOps – "Where All Systems Ascend."
-22. ValkyrieVision – "Guiding Your Code to Glory."
-23. RuneLogic – "Decoding the Secrets of Smart Systems."
-24. MjolnirBuild – "Hammer Out Powerful Deployments."
-25. BifrostBridge – "Connecting Worlds of Data and Code."
-26. FenrirGuard – "Unleash Security That Bites Back."
-27. JotunCompute – "Giant Power for Massive Processing."
-28. SleipnirSpeed – "Ride Eight-Legged Fast to Delivery."
-29. HodrShadow – "Silent Strength for Dark Ops."
-30. VanaheimVault – "Store Your Secrets Like the Gods."
-31. EinherjarTest – "Battle-Tested for Ultimate Reliability."
-32. GjallarhornAlert – "Sound the Alarm Before Chaos Strikes."
-33. NornPredict – "Fate-Driven Forecasting for Your Data."
-34. SurtrFire – "Ignite Performance with Relentless Heat."
-35. HrimfaxiSync – "Night-Rider Speed for Data Sync."
-36. AlfheimUI – "Light-Elf Elegance for Your Interfaces."
-37. VíðarrSilent – "Quiet Power for Background Tasks."
-38. RatatoskrLink – "Fast Messaging Across the Tree of Life."
-39. GungnirDeploy – "Strike True with Precision Deployments."
-40. DraupnirScale – "Infinite Replication, Just Like the Ring."
