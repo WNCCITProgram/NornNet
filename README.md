@@ -29,6 +29,15 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 - [Demo Creating an App Using Ollama OpenAI Python Client](https://notes.kodekloud.com/docs/Running-Local-LLMs-With-Ollama/Building-AI-Applications/Demo-Creating-an-App-Using-Ollama-OpenAI-Python-Client)
 - [How to Create Your Own AI Chatbot Like DeepSeek with Ollama in Python Flask](https://www.codewithfaraz.com/python/112/how-to-create-your-own-ai-chatbot-like-deepseek-with-ollama-in-python-flask)
 
+## Create Pull Request on NornNet Github
+
+1. Fork the NornNet Repository.
+2. Pull local copy to your computer.
+3. Make code changes.
+4. Commit --> then Push to your repository
+5. If your repository is not up to date --> Synchronize Changes.
+6. Create a Pull Request.
+
 ## AI ChatBot Project (Private AI options)
 
 - Please watch: [Video about Guild Project](https://wnccnet-my.sharepoint.com/:v:/g/personal/loringw_wncc_edu/EQc3SGTfIatAkoM0KrAEeMcBv-unJKhR9tElYD93-XLvCA?e=ixGNOO) (10-16-25)
