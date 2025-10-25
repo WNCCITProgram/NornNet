@@ -4,7 +4,7 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 
 ## Team Members
 
-- Elizier Lamen
+- Elizier Lamien
 - Owen Osmera
 - Christi Pendergraft
 - Joe Scott
@@ -28,6 +28,7 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 - [Part 2 - Local Ollama Chatbot in Python](https://youtu.be/CJVR4HE_j-0?si=2_1ByW7LU14GOgZ7)
 - [Demo Creating an App Using Ollama OpenAI Python Client](https://notes.kodekloud.com/docs/Running-Local-LLMs-With-Ollama/Building-AI-Applications/Demo-Creating-an-App-Using-Ollama-OpenAI-Python-Client)
 - [How to Create Your Own AI Chatbot Like DeepSeek with Ollama in Python Flask](https://www.codewithfaraz.com/python/112/how-to-create-your-own-ai-chatbot-like-deepseek-with-ollama-in-python-flask)
+- [Learn Ollama in 15 Minutes - Run LLM Models Locally for FREE](https://youtu.be/UtSSMs6ObqY)
 
 ## Create Pull Request on NornNet Github
 
@@ -74,6 +75,7 @@ The implementation is split into phases so the team can ship incrementally.
 2. Extract the zip file --> place all files in c:\ollama
 3. Add to system environment variables: c:\ollama
 4. Verify installation: Open a Command Prompt:
+5. Verify that gemma3:4b is installed as the model
 
    ```ollama --version```
 
