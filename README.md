@@ -18,6 +18,10 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 - [Flask Unit Converter](https://itinstructor.github.io/WNCCComputerScience/Python/Web_Development/Flask_Unit_Converter.pdf)
 - [Flask Blog Tutorial](https://itinstructor.github.io/WNCCComputerScience/Python/Web_Development/Python_Flask_Blog_Tutorial.pdf)
 
+# Completed:
+
+[FLASK_TUTORIALS.zip](https://github.com/user-attachments/files/23172312/FLASK_TUTORIALS.zip)
+
 ## AI Private ChatBot Research
 
 - [LM Studio Tutorial: Run Large Language Models (LLM) on Your Laptop](https://youtu.be/ygUEbCpOOLg?si=udEcraHqxw08DPsN)
