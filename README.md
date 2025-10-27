@@ -45,6 +45,11 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 
 Python Flask project to create a web chatbot. Private mode: host an open-source model yourself (local server, private cloud, or on-prem) for full control over data and privacy.
 
+## Personal Research
+
+Integrate an LLM into flask with python
+https://github.com/ollama/ollama-python
+
 ## Project Outline: Flask Chatbot (Private AI)
 
 ## 1. Project Goal 🎯
