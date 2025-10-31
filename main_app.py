@@ -1,5 +1,9 @@
 
 from flask import Flask, Blueprint, render_template, request, abort
+from logging_config import setup_logger
+
+# Set up logging (file only, no console output)
+logger = setup_logger('main_app', 'main_app.log', console_output=False)
 
 # Create a Blueprint with /nornnet as the URL prefix
 # To run locally: Uncomment the first one, Comment the second one
@@ -9,11 +13,13 @@ nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/nornnet', template_fold
 
 @nornnet_bp.route("/")
 def hello():
+    logger.info(f"Index page accessed from {request.remote_addr}")
     return render_template("index.html")
 
 
 @nornnet_bp.route('/docs')
 def docs():
+    logger.info(f"Docs page accessed from {request.remote_addr}")
     return render_template('docs.html')
 
 
@@ -25,6 +31,7 @@ app = Flask(__name__, static_folder='static', static_url_path='/nornnet/static')
 
 # Register the blueprint
 app.register_blueprint(nornnet_bp)
+logger.info("Blueprint 'nornnet' registered successfully")
 
 
 @app.context_processor
@@ -34,5 +41,33 @@ def inject_globals():
     return dict(current_year=datetime.utcnow().year)
 
 
+@app.before_request
+def log_request():
+    """Log each incoming request."""
+    logger.info(f"Request: {request.method} {request.path} from {request.remote_addr}")
+
+
+@app.after_request
+def log_response(response):
+    """Log each response."""
+    logger.info(f"Response: {request.method} {request.path} - Status {response.status_code}")
+    return response
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    """Log 404 errors."""
+    logger.warning(f"404 Error: {request.path} from {request.remote_addr}")
+    return "Page not found", 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Log 500 errors."""
+    logger.error(f"500 Error: {request.path} from {request.remote_addr} - {error}")
+    return "Internal server error", 500
+
+
 if __name__ == "__main__":
+    logger.info("Starting Flask development server")
     app.run(debug=True)
