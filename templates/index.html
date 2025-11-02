@@ -23,4 +23,38 @@
     </div>
   </div>
 
+  <script>
+    // PSEUDOCODE: AI Interaction Fflow
+
+    /*
+      Function sendMessage():
+      1. Read user text input from the text field.
+      2. If input is empty, exit the function.
+      3. Append user's message to the chat display area.
+      4. Send message to the Flask backend via a POST request to /chat.
+      5. Wait for backend to process message and return AI-generated reply.
+      6. Append the bot's reply below the user's message.
+      7. Clear the input box and scroll chatbox to bottom.
+    */
+
+
+    // TODO: Implement additional features for future release once intital release in stable
+    // - TODO: Add  typing indicator "Norn is thinking...."
+    // - Add timestamp for each message
+    // - Improve error handling if /chat endpoint fails
+
+    /*
+      async function sendMessage() {
+        Step 1: Get user input
+        Step 2: Skip if empty
+        Step 3: Display user message
+        Step 4: Send message to backend Flask API
+        Step 5: Recieve AI reply from JSON
+        // TODO: Handle cases where the backend returns an error
+        Step 6: Display bot reply
+        Step 7: Clear input and auto-scroll chat
+      }
+    */
+  </script>
+
 {% endblock %}
