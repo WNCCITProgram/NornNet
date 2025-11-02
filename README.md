@@ -10,7 +10,6 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 - Joe Scott
 - Caleb Stewart
 - Shawn Noon
-- Jens Boerman
 
 ## Flask Tutorials
 

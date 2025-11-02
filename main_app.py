@@ -1,6 +1,6 @@
 
 from flask import Flask, Blueprint, render_template, request, abort
-from logging_config import setup_logger
+from app_logging import setup_logger
 
 # Set up logging (file only, no console output)
 logger = setup_logger('main_app', 'main_app.log', console_output=False)

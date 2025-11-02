@@ -1,6 +1,3 @@
-print("=== WAITRESS_APP.PY STARTUP MARKER ===", flush=True)
-import sys
-sys.stdout.flush()
 """
 Filename: waitress_app.py
 Description: This script sets up and runs a Waitress WSGI server
@@ -10,15 +7,15 @@ to serve a Flask web application.
 from main_app import app
 import os
 from sys import path
-from logging_config import setup_logger
+from app_logging import setup_logger
 
 # Add current directory to path to ensure imports work
 path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 THREADS = 64
 
-# Set up logging (with console output for immediate feedback)
-logger = setup_logger('waitress_app', 'waitress_app.log', console_output=True)
+# Set up logging (file only; no console output)
+logger = setup_logger('waitress_app', 'waitress_app.log', console_output=False)
 logger.info(f"Current working directory: {os.getcwd()}")
 logger.info("Flask app imported successfully")
 

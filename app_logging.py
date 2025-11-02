@@ -1,5 +1,5 @@
 """
-Filename: logging_config.py
+Filename: app_logging.py
 Description: Centralized logging configuration for the NornNet application.
 Sets up file-based logging with daily rotation for both main_app and waitress_app.
 """
