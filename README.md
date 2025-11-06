@@ -1,10 +1,11 @@
-# NornNet - The fates who weave destiny
+# NornNet
 
-A private AI ChatBot
+Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot that rocks!
 
 ## Team Members
 
-- Elizier Lamen
+- Elizier Lamien
+- Owen Osmera
 - Christi Pendergraft
 - Joe Scott
 - Caleb Stewart
@@ -18,144 +19,233 @@ A private AI ChatBot
 
 ## AI Private ChatBot Research
 
+- [LM Studio Tutorial: Run Large Language Models (LLM) on Your Laptop](https://youtu.be/ygUEbCpOOLg?si=udEcraHqxw08DPsN)
 - [Network Chuck Private AI](https://www.youtube.com/watch?v=WxYC9-hBM_g)
 - [How to Build a Local AI Agent With Python (Ollama, LangChain & RAG)](https://youtu.be/E4l91XKQSgw?si=Q-Unp9DOsImHkXbS)
 - [The Ultimate Guide to Local AI and AI Agents (The Future is Here)](https://youtu.be/mNcXue7X8H0?si=uSyVxAVtBBj1cMHZ)
+- [Part 1 - Run Ollama with Python in 5 Minutes (Full Setup Guide](https://youtu.be/7uTt5t0B3H0?si=wlLhD5IsrULHp54X)
+- [Part 2 - Local Ollama Chatbot in Python](https://youtu.be/CJVR4HE_j-0?si=2_1ByW7LU14GOgZ7)
+- [Demo Creating an App Using Ollama OpenAI Python Client](https://notes.kodekloud.com/docs/Running-Local-LLMs-With-Ollama/Building-AI-Applications/Demo-Creating-an-App-Using-Ollama-OpenAI-Python-Client)
+- [How to Create Your Own AI Chatbot Like DeepSeek with Ollama in Python Flask](https://www.codewithfaraz.com/python/112/how-to-create-your-own-ai-chatbot-like-deepseek-with-ollama-in-python-flask)
+- [Learn Ollama in 15 Minutes - Run LLM Models Locally for FREE](https://youtu.be/UtSSMs6ObqY)
 
-## AI ChatBot Project (Public + Private AI options)
+## Personal Research
 
-Python Flask project to create a web chatbot. The plan supports two deployment modes so the team can choose based on resources and privacy needs:
+Integrate an LLM into flask with python
+https://github.com/ollama/ollama-python
+Create, read, and write to a PDF file
+https://github.com/py-pdf/pypdf
+Chat history/Memory/Context
+https://github.com/digithree/ollama-rag
 
-- Public mode: use the Hugging Face Inference API (quick to get started, minimal infra).
-- Private mode: host an open-source model yourself (local server, private cloud, or on-prem) for full control over data and privacy.
+## Create Pull Request on NornNet Github
 
-Both modes use the same Flask frontend and chat UI; only the backend connector differs.
+1. Fork the NornNet Repository.
+2. Pull local copy to your computer.
+3. Make code changes.
+4. Commit --> then Push to your repository
+5. If your repository is not up to date --> Synchronize Changes.
+6. Create a Pull Request.
 
-### Project Outline: Flask Chatbot (Public or Private AI)
+## AI ChatBot Project (Private AI options)
 
-#### 1. Project Goal 🎯
+- Please watch: [Video about Guild Project](https://wnccnet-my.sharepoint.com/:v:/g/personal/loringw_wncc_edu/EQc3SGTfIatAkoM0KrAEeMcBv-unJKhR9tElYD93-XLvCA?e=ixGNOO) (10-16-25)
 
-Build a reliable web chatbot. The app should let users exchange messages with an AI model and see streamed or batched responses. Provide two options:
+Python Flask project to create a web chatbot. Private mode: host an open-source model yourself (local server, private cloud, or on-prem) for full control over data and privacy.
 
-- Fast prototype using the Hugging Face Inference API.
+## Project Outline: Flask Chatbot (Private AI)
+
+## 1. Project Goal 🎯
+
+Build a reliable web chatbot. The app should let users exchange messages with an AI model and see streamed responses.
+
 - Privacy-first solution running a private model server (containerized) with secure access and logging controls.
 
-#### 2. Key Technologies
+## 2. Key Technologies
 
-- **Backend**: Python, Flask (chat endpoint and API connector)
-- **Frontend**: HTML, CSS, JavaScript (fetch/streaming)
-- **Public AI**: Hugging Face Inference API (requests)
-- **Private AI**: local model server (examples: Hugging Face's Text Generation Inference, vLLM, or a lightweight runtime like llama.cpp / GGML for CPU quantized models)
-- **Infra & DevOps**: Docker, docker-compose (or k8s), nginx or Traefik, certs
-- **Security & Config**: `python-dotenv`, vault or env-managed secrets
-- **Optional**: Redis (rate-limit, caching), SQLite/Postgres (simple session/log storage)
+- **Backend**: Python, Flask, Waitress (chat endpoint and API connector)
+- **Frontend**: HTML, CSS, JavaScript 
+- **Private AI**: local model server (lightweight runtime like llama.cpp / GGML for CPU quantized models)
 
 ---
 
-### 3. Architecture & Implementation Plan
+## 3. Architecture & Implementation Plan
 
-High level: Client (browser) -> Flask app -> (Hugging Face API) OR (Private model server) -> Flask -> browser.
+High level: Client (browser) -> Flask app -> (Private model server) -> Flask -> browser.
 
 The implementation is split into phases so the team can ship incrementally.
 
-#### Phase 1 — Basic Flask Server & UI
+## Phase 1: Setup Flask Server & Ollama Backend
 
-- Create `app.py` with routes for the homepage (`/`) and chat (`/chat`).
+### ✅ Install ollama on Windows 2025 Server
+
+1. Download the latest [Ollama Release](https://github.com/ollama/ollama/releases) (e.g., ollama-windows-amd64.zip)
+2. Extract the zip file --> place all files in c:\ollama
+3. Add to system environment variables: c:\ollama
+4. Verify installation: Open a Command Prompt:
+5. Verify that gemma3:4b is installed as the model
+
+   ```ollama --version```
+
+5. Pull a Model to test with:
+  
+    ```ollama pull gemma 3:4b```
+
+### ✅ Set Up Ollama as a Windows Service (using NSSM)
+
+This ensures Ollama starts automatically with the server and restarts if it ever crashes, without requiring a user to be logged in.
+
+Step 1: Download NSSM
+
+1. Go to the [NSSM download page](https://nssm.cc/download).
+2. Download the latest release (e.g., nssm-2.24.zip).
+3. Extract the ZIP file to a permanent location on your server, like C:\nssm
+
+Step 2: Configure the Ollama Service with NSSM
+
+1. Open an Administrator Command Prompt or Administrator PowerShell.
+
+   ```nssm install Ollama```
+
+This will open the NSSM service installer GUI.
+
+Application Tab:
+
+1. Path: Click the ... button and navigate to your ollama.exe file.
+2. Startup directory: This should automatically populate to the correct folder.
+3. Arguments: This is the most important part. Enter:
+
+   ```serve```
+  
+This tells Ollama to run as a server.
+
+4. Log on Tab: For a server, it's best to run this as a Local System account. Select the
+
+ ```Local System account```
+
+ radio button. This allows the service to run even when no user is logged in.
+ 
+ 5. Environment Tab: This is critical for allowing your Flask server to access Ollama.
+ 6. In the Environment variables box, add the following key-value pair:
+
+   ```OLLAMA_HOST=0.0.0.0```
+
+  This tells Ollama to listen for requests on all network interfaces, not just localhost.
+
+  7. Click the ```Install service``` button. You should see a "Service 'Ollama' installed successfully!" message.
+
+Step 3: Start the Service
+
+1. Open the Windows Services app (run services.msc).
+2. Find your new service named Ollama.
+3. Right-click it and select Start.
+4. Verify it's working: Open your server's web browser and navigate to:
+  
+   ```http://localhost:11434```
+
+5. You should see the message "Ollama is running."
+
+The Ollama server is now running as a persistent service on port 11434, accessible from other machines on your network.
+
+☐ Todo — Draft README
+🔄 In progress — Add examples and docs
+✅ Complete — Initial release
+
+## Flask Web Server
+
+🔄 In progress
+
+- Create `main_app.py` with routes for the homepage (`/`) and chat (`/chat`).
 - Build `index.html` with a chat history, input, and send button.
 - Implement minimal CSS to make the UI usable.
+- Download the student handbook onto the server for the AI to reference
+- Create virtual environment
+  - Install python ollama library:
 
-#### Phase 2 — Frontend-Backend Communication
+     ```pip install ollama```
+
+## Phase 2: Frontend-Backend Communication
+
+☐ Todo
 
 - Use `main.js` to send user messages to `/chat` and append both user and bot messages to the DOM.
-- Implement a temporary backend response for testing (hardcoded echo).
 
-#### Phase 3A — Public AI Integration (Hugging Face)
+## Phase 3 — Private AI Integration (self-hosted)
 
-- Add a connector module that calls the Hugging Face Inference API using an API token stored in `.env`.
-- Implement request shaping and basic error handling (timeouts, retries, rate-limit backoff).
+☐ Todo
 
-#### Phase 3B — Private AI Integration (self-hosted)
-
-- Choose a lightweight serving setup based on available hardware:
-  - CPU-only machines: prefer quantized models (GGML / llama.cpp) or small transformer models.
-  - GPU machines: use `text-generation-inference`, `vLLM`, or a container running Transformers with Triton/accelerated stack.
-- Containerize a model server and expose an internal HTTP endpoint. The Flask app calls the internal endpoint instead of the external API.
-- Secure the private server: mTLS / API key, and run behind nginx/Traefik; store keys in `.env` or a secret manager.
+- CPU-only machines: prefer quantized models (GGML / llama.cpp) or small transformer models.
+- Create a model server and expose an internal HTTP endpoint.
+- Secure the private server: mTLS / API key, and run behind an IIS server which runs waitress
 - Add support for streaming responses if the model server supports it.
 
-#### Phase 4 — Privacy, Logging & Data Handling
+## Phase 4 — Privacy, Logging & Data Handling
+
+☐ Todo
 
 - Decide what to log (timestamps, anonymized session id, message length). Avoid storing PII by default.
 - Add a user-facing privacy notice and an opt-out for logging.
 - Implement retention policy and a script to sweep/delete logs older than X days.
 
-#### Phase 5 — Deploy & Ops (optional)
+## Phase 5 — Deploy & Ops
 
-- Provide a `docker-compose.yml` that brings up the Flask app and (optionally) a local model server for private mode.
-- Add a `Makefile` or simple shell scripts to build and run locally.
+☐ Todo
+
 - Add health checks, simple metrics (request counts, success/failure), and basic monitoring instructions.
 
 ---
 
-### 4. Task Breakdown for 6 Students (Public + Private AI tasks)
+### 4. Task Breakdown
 
-This plan maps student roles so the same team can implement either the quick public mode or the privacy-oriented private mode.
+This plan maps team roles to implement the privacy-oriented private mode.
 
-#### Pair 1 — Frontend (UI/UX)
+#### Frontend (UI/UX)
 
-- Student 1 (HTML & Structure): `index.html` — chat layout, message list, input form.
-- Student 2 (CSS & Interactivity): `style.css` and `main.js` — chat bubbles, responsive layout, DOM updates, optimistic UI.
+- Team 1 (HTML & Structure): `index.html` — chat layout, message list, input form.
+- Team 2 (CSS & Interactivity): `style.css` and `main.js` — chat bubbles, responsive layout, DOM updates, optimistic UI.
 
 Shared goal: Deliver a clean, usable chat UI with graceful error states.
 
-#### Pair 2 — Backend (Flask Core)
+#### Backend (Flask Core)
 
-- Student 3 (Server & Routing): `app.py` — create routes, session handling, simple persistence for sessions.
-- Student 4 (Request & Response Handling): Implement `/chat` logic that validates input, forwards to the connector, and returns JSON or streaming responses.
+- Team 3 (Server & Routing): `app.py` — create routes, session handling, simple persistence for sessions.
+- Team 4 (Request & Response Handling): Implement `/chat` logic that validates input, forwards to the connector, and returns JSON or streaming responses.
 
 Shared goal: Reliable, well-documented endpoints and simple persistence for conversation history.
 
-#### Pair 3 — AI Integration & Ops
+#### AI Integration & Ops
 
-- Student 5 (Public AI Connector & Model Research): Implement the Hugging Face connector, token management, request shaping, and tests. Research candidate models and tradeoffs.
-- Student 6 (Private AI & Security): Implement local/private model server wiring (Dockerfile, `docker-compose`), secure the endpoint (API key), manage secrets in `.env`, and implement logging & retention rules. If hardware allows, tune for streaming and lower-latency inference.
-
-Shared goal: Provide two working connectors (Hugging Face + Private) and clear switching configuration for the Flask app.
+- Team 5 (Private AI & Security): Implement local/private model server wiring and implement logging & retention rules. If hardware allows, tune for streaming and lower-latency inference.
 
 Optional extras for the team:
 
 - Add unit/integration tests for the connector code.
 - Add a small evaluation page that replays test prompts and shows model outputs side-by-side.
-- Add simple cost/latency telemetry so the team can compare public vs private modes.
+- Add simple cost/latency telemetry so the team can compare different models.
 
 ---
 
 Notes and safety:
 
-- When using public APIs, never commit tokens to the repository. Always use `.env` and add it to `.gitignore`.
 - For private hosting, pick a model size that fits your hardware. Quantized CPU models are great for demos and privacy.
 - Make privacy decisions explicit in the app UI (logging on/off, data retention).
 
-
 **Shared Goal**: Create an intuitive and attractive user interface.
 
-#### **Pair 2: The Backend Team (Flask Core)** ⚙️
+#### **Team 2: The Backend Team (Flask Core)** ⚙️
 
 This pair builds the server-side foundation of the application.
 
-- **Student 3 (Server & Routing)**: Set up the `app.py` file, initialize the Flask application, and create the routes for the home page (`/`) and the chat endpoint (`/chat`).
-- **Student 4 (Request & Response Handling)**: Implement the logic within the routes to handle incoming `POST` requests from the frontend. Manage the data flow, ensuring that user input is correctly received and that responses are sent back in the proper JSON format.
+- **Team 3 (Server & Routing)**: Set up the `app.py` file, initialize the Flask application, and create the routes for the home page (`/`) and the chat endpoint (`/chat`).
+- **Team 4 (Request & Response Handling)**: Implement the logic within the routes to handle incoming `POST` requests from the frontend. Manage the data flow, ensuring that user input is correctly received and that responses are sent back in the proper JSON format.
 
 **Shared Goal**: Build a stable and reliable server that connects the frontend to the AI logic.
 
-#### **Pair 3: The AI Integration Team (API Connectors)** 🧠
+#### **Team 3: The AI Integration Team (API Connectors)** 🧠
 
 This pair focuses on the "smart" part of the chatbot.
 
-- **Student 5 (API Research & Logic)**: Research suitable conversational models on the Hugging Face Hub. Write the core Python function that takes a user's message, formats it correctly, and sends it to the Hugging Face Inference API.
-- **Student 6 (Security & Data Parsing)**: Responsible for securely managing the Hugging Face API token using a `.env` file. They will also write the code to parse the complex JSON response from the API, extract the meaningful text, and handle potential errors (like if the API is down).
-
-**Shared Goal**: Successfully connect to the Hugging Face API and reliably retrieve AI-generated responses.
+- **Team 5 (API Research & Logic)**: Research suitable conversational models on the Hugging Face Hub. Write the core Python function that takes a user's message, formats it correctly, and sends it to the Hugging Face Inference API.
 
 ## Project Ideas
 
@@ -276,56 +366,3 @@ A very simple website that displays a new, random quote each day.
   - **Students 1 & 2 (Backend & Database)**: Create a `Quote` model (text, author). Write the main route that selects a random quote from the database and passes it to the template.
   - **Students 3 & 4 (Admin Panel)**: Build a simple form and route for an admin to add new quotes.
   - **Students 5 & 6 (Frontend)**: Design a visually appealing homepage to display the quote of the day.
-
-
-## Project Names for Future Projects
-
-- OdinChat – wise and all-seeing.
-- LokiTalk – mischievous and clever, perfect for a witty assistant.
-- FenrirBot – fierce and untamed, for a bold AI.
-- ValhallaTalk – epic and heroic, for a grand assistant.
-- NornNet – named after the fates who weave destiny.
-- AsgardAI – the realm of the gods, lofty and powerful. 
-
-Project Ragnarok: While Ragnarok is the "end of the world," in a project context it can signify the final, ultimate version of a build or a stress-testing application designed to push a system to its limits.
-
-1. OdinCode- All-seeing god meets all-seeing code.
-2. ThorByte - Hammering out powerful code and projects.
-3. LokiLogic - Clever, unpredictable algorithms and coding.
-4. ValhallaDev - A heaven for developers and their code.
-5. AsgardianTech - Divine tech from the realm of the gods.
-6. FreyaStack - Beauty and brains in full-stack development.
-7. MjolnirLabs - Where code hits like a thunderbolt.
-8. YggdrasilNet - The tree that connects all systems—like your project architecture.
-9. HeimdallHub - The guardian of gateways (perfect for network-related projects).
-10. TyrScripts - Justice in clean, efficient scripting.
-11. RunicCode - Ancient runes meet modern syntax.
-12. NorseNode - A network or idea node with mythic roots.
-13. BifrostBridge - Bridging users and data like the rainbow bridge.
-14. OdinWare - Software that sees all, like the Allfather.
-15. FrostGiant.dev - Big ideas, colder execution. Great for back-end-heavy projects.
-16. SagaSys - Every project tells a saga. Ideal for system design.
-17. RagnarokAI - Where machine learning meets the end of the old world.
-18. NornNet - The Norns wove fate; you weave networks.
-19. SkadiSoft - Precision and cold beauty in user interface.
-20. FenrirCode - Unleashing wild and powerful code—best for disruptive apps.
-21. AsgardOps – "Where All Systems Ascend."
-22. ValkyrieVision – "Guiding Your Code to Glory."
-23. RuneLogic – "Decoding the Secrets of Smart Systems."
-24. MjolnirBuild – "Hammer Out Powerful Deployments."
-25. BifrostBridge – "Connecting Worlds of Data and Code."
-26. FenrirGuard – "Unleash Security That Bites Back."
-27. JotunCompute – "Giant Power for Massive Processing."
-28. SleipnirSpeed – "Ride Eight-Legged Fast to Delivery."
-29. HodrShadow – "Silent Strength for Dark Ops."
-30. VanaheimVault – "Store Your Secrets Like the Gods."
-31. EinherjarTest – "Battle-Tested for Ultimate Reliability."
-32. GjallarhornAlert – "Sound the Alarm Before Chaos Strikes."
-33. NornPredict – "Fate-Driven Forecasting for Your Data."
-34. SurtrFire – "Ignite Performance with Relentless Heat."
-35. HrimfaxiSync – "Night-Rider Speed for Data Sync."
-36. AlfheimUI – "Light-Elf Elegance for Your Interfaces."
-37. VíðarrSilent – "Quiet Power for Background Tasks."
-38. RatatoskrLink – "Fast Messaging Across the Tree of Life."
-39. GungnirDeploy – "Strike True with Precision Deployments."
-40. DraupnirScale – "Infinite Replication, Just Like the Ring."
