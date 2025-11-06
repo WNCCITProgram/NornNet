@@ -31,9 +31,9 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 
 ## Personal Research
 
-Integrate an LLM into flask with python https://github.com/ollama/ollama-python
-Create, read, and write to a PDF file https://github.com/py-pdf/pypdf
-Chat history/Memory/Context https://github.com/digithree/ollama-rag
+- Integrate an LLM into flask with python https://github.com/ollama/ollama-python
+- Create, read, and write to a PDF file https://github.com/py-pdf/pypdf
+- Chat history/Memory/Context https://github.com/digithree/ollama-rag
 
 ## Create Pull Request on NornNet Github
 
