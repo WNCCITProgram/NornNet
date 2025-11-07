@@ -176,6 +176,24 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 - Secure the private server: mTLS / API key, and run behind an IIS server which runs waitress
 - Add support for streaming responses if the model server supports it.
 
+# Tasks for the week of 11/2/25 - 11/9/25
+
+- Make the ai function a class.
+  - DO NOT chage the AI function file only make a new file for the class.
+  - SetUserQuestion
+  - GetUserQuestion
+  - GetAIResponse
+  - SetAIPrompt
+  - GetAIPrompt
+
+- Find a way to get a pdf reader in python and integrate that into the code.
+  - This can be a function for class we just need a way to read the file to create words for prompting the ai.
+
+- Find out if context can be enabled on ollama.
+  - Integrate this into the code so the AI can have context
+
+
+
 ## Phase 4 — Privacy, Logging & Data Handling
 
 ☐ Todo
