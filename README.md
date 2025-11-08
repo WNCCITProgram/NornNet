@@ -178,21 +178,22 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 
 # Tasks for the week of 11/2/25 - 11/9/25
 
-- Make the ai function a class.
+- Make the ai function a class for expandability.
   - DO NOT chage the AI function file only make a new file for the class.
   - SetUserQuestion
   - GetUserQuestion
   - GetAIResponse
   - SetAIPrompt
   - GetAIPrompt
-
 - Find a way to get a pdf reader in python and integrate that into the code.
+  - How do we add the student handbook as context for the ai?
   - This can be a function for class we just need a way to read the file to create words for prompting the ai.
-
 - Find out if context can be enabled on ollama.
   - Integrate this into the code so the AI can have context
-
-
+  - Research using CAG or RAG
+- Add github repository address to docs page.
+- Add responsive design to user interface. The interface should resize for different devices. Look at ChatGPT for an example
+- 
 
 ## Phase 4 — Privacy, Logging & Data Handling
 
