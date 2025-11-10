@@ -10,22 +10,59 @@
 # free to modify anything. I've really no room to tell you
 # no anyway.
 
-class NornNet_Func():
+import ollama
+
+class ai_class():
     # === Getters === #
+    def __init__(self):
+        self.ai_response = ""
+        self.user_question = ""
+        self.ai_prompt = ""
 
-    def get_user_question():
-        pass
+    def get_user_question(self):
+        return self.user_question
 
-    def get_ai_response():
-        pass
+    def get_ai_response(self):
+        # get a response from the modle
+        self.ai_response = ollama.chat(model="gemma3:4b", messages=[
+                                {"role": "user", "content": self.user_question}])
 
-    def get_ai_prompt():
-        pass
+        # Checks if the AI gave the user output
+        if 'message' in self.ai_response:
+            return self.ai_response['message']['content']
+        else:
+            return 'Sorry something went wrong.'
+        
+
+    def get_ai_prompt(self):
+        return self.ai_prompt
 
     # === Setters === #
 
-    def set_user_question():
-        pass
+    def set_user_question(self, user_question):
+        self.user_question = user_question
+        
 
-    def set_ai_prompt():
-        pass
+    def set_ai_prompt(self, ai_prompt):
+        self.ai_prompt = ai_prompt
+
+
+def main():
+    robot = ai_class()
+    robot.set_user_question("HELLO")
+    # Get ai prompt currently nothing since this is a test
+    robot.set_ai_prompt("NOTHING")
+
+    print(robot.get_user_question())
+
+    print()
+
+    print(robot.get_ai_prompt())
+
+    print()
+
+    print(robot.get_ai_response())
+
+
+if __name__ == "__main__":
+    main()
