@@ -6,7 +6,6 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 
 - Elizier Lamien
 - Owen Osmera
-- Christi Pendergraft
 - Joe Scott
 - Caleb Stewart
 - Shawn Noon
