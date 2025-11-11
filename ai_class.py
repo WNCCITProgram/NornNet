@@ -12,21 +12,68 @@
 
 import ollama
 
+# Bill 11/10/2025:
+# Created MODEL constant for easier future changes.
+# MODEL = "llama3:8b-instruct-q4_K_M"
+# MODEL = "gemma3:4b"
+# Similar model to gemma3:4b but fine-tuned for instruction following.
+# MODEL = "gemma3:4b-it-qat"
+
+# Model: llama3.1:8b-instruct-q4_K_M or llama3.1:8b
+# Size: ~4.9-5 GB
+# Speed: Similar to current (slightly slower but worth it)
+# Accuracy: Much better than Gemma 4B, excellent reasoning
+# Why: Llama 3.1 8B is one of the best CPU models for accuracy. The Q4_K_M quantization maintains quality while being CPU-efficient.
+# This is the best model for CPU inference.
+# Context Window: 128K tokens (huge!)
+# Why Best: Specifically designed for RAG with massive context window, excellent at following instructions and not adding information beyond context
+MODEL = "llama3.1:8b-instruct-q4_K_M"
+
+# Memory Optimization Notes:
+# The ollama.chat() options parameter supports memory-mapped I/O (use_mmap=True)
+# which loads the model efficiently without loading the entire model into RAM at once.
+# For best performance on systems with adequate RAM, also set use_mlock=True
+# to prevent the model from being swapped to disk.
+
+
 class ai_class():
-    # === Getters === #
+
     def __init__(self):
         self.ai_response = ""
         self.user_question = ""
         self.ai_prompt = ""
 
+    # === Getters === #
     def get_user_question(self):
         return self.user_question
 
     def get_ai_response(self):
         try:
-            # Get a response from the module
-            self.ai_response = ollama.chat(model="gemma3:4b", messages=[
-                                    {"role": "user", "content": self.user_question}])
+            # Get a response from the module with optimized memory settings
+            # Options for efficient memory usage:
+            # - use_mmap: Enable memory-mapped file I/O for efficient model loading
+            # - use_mlock: Lock model in RAM to prevent swapping (set True if enough RAM)
+            # - num_ctx: Context window size (reduce if memory constrained)
+            # - num_thread: Number of threads (adjust based on CPU cores available)
+            self.ai_response = ollama.chat(
+                model=MODEL,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": self.user_question
+                    }
+                ],
+                options={
+                    "use_mmap": True,     # Enable memory-mapped I/O for efficient loading
+                    "use_mlock": True,    # Set to True if you have enough RAM to lock model
+                    # Context window (default 2048, reduce if low memory)
+                    "num_ctx": 2048,
+                    # Streaming response (set to True for real-time streaming)
+                    "stream": False,
+                    # CPU threads to use (adjust based on your CPU)
+                    "num_thread": 8
+                }
+            )
 
             # Checks if the AI gave the user output
             if 'message' in self.ai_response:
@@ -38,7 +85,6 @@ class ai_class():
             error_msg = f"Ollama connection error: {str(e)}"
             print(error_msg)  # This will go to waitress_app.log
             return f"Error: Could not connect to NornNet server. ({str(e)})"
-        
 
     def get_ai_prompt(self):
         return self.ai_prompt
@@ -47,7 +93,6 @@ class ai_class():
 
     def set_user_question(self, user_question):
         self.user_question = user_question
-        
 
     def set_ai_prompt(self, ai_prompt):
         self.ai_prompt = ai_prompt
