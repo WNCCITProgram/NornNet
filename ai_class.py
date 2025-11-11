@@ -12,6 +12,25 @@
 
 import ollama
 
+# Cache available models at module load
+AVAILABLE_MODELS = []
+
+def enumerate_models():
+    """Enumerate all available Ollama models at startup."""
+    global AVAILABLE_MODELS
+    try:
+        response = ollama.list()
+        # response.models is a list of Model objects with .model attribute
+        AVAILABLE_MODELS = [model.model for model in response.models]
+        print(f"Available Ollama models: {AVAILABLE_MODELS}")
+        return AVAILABLE_MODELS
+    except Exception as e:
+        print(f"Error enumerating models: {e}")
+        return []
+
+# Enumerate models at startup
+enumerate_models()
+
 # Bill 11/10/2025:
 # Created MODEL constant for easier future changes.
 # MODEL = "llama3:8b-instruct-q4_K_M"
@@ -38,10 +57,12 @@ MODEL = "llama3.1:8b-instruct-q4_K_M"
 
 class ai_class():
 
-    def __init__(self):
+    def __init__(self, model=None):
         self.ai_response = ""
         self.user_question = ""
         self.ai_prompt = ""
+        # Use provided model or fall back to default MODEL constant
+        self.model = model if model else MODEL
 
     # === Getters === #
     def get_user_question(self):
@@ -56,7 +77,7 @@ class ai_class():
             # - num_ctx: Context window size (reduce if memory constrained)
             # - num_thread: Number of threads (adjust based on CPU cores available)
             self.ai_response = ollama.chat(
-                model=MODEL,
+                model=self.model,  # Use instance model instead of global MODEL
                 messages=[
                     {
                         "role": "user",

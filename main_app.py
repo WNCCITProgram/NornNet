@@ -1,6 +1,6 @@
 
 from flask import Flask, Blueprint, render_template, request, jsonify, abort
-from ai_class import ai_class
+from ai_class import ai_class, AVAILABLE_MODELS
 from app_logging import setup_logger
 
 # Set up logging (file only, no console output)
@@ -35,6 +35,20 @@ def hello():
     return render_template("index.html", user_input=user_input, ai_response=ai_response)
 
 # ---------------------------------------------------------------
+# NEW Route: /nornnet/models — get available Ollama models
+# ---------------------------------------------------------------
+@nornnet_bp.route("/models", methods=["GET"])
+def get_models():
+    """Return list of available Ollama models."""
+    try:
+        logger.info(f"Models endpoint called. Available models: {len(AVAILABLE_MODELS)}")
+        return jsonify({"models": AVAILABLE_MODELS}), 200
+    except Exception as e:
+        logger.error(f"Models endpoint error: {e}")
+        return jsonify({"models": []}), 500
+
+
+# ---------------------------------------------------------------
 # NEW Route: /nornnet/chat — asynchronous API endpoint for JS fetch()
 # ---------------------------------------------------------------
 @nornnet_bp.route("/chat", methods=["POST"])
@@ -42,13 +56,17 @@ def chat():
     """Handle AJAX chat requests from the frontend and return AI response as JSON."""
     try:
         user_message = request.json.get("message", "").strip()
+        selected_model = request.json.get("model", None)  # Get model from request
         logger.info(f"Received chat message: {user_message}")
+        if selected_model:
+            logger.info(f"Using model: {selected_model}")
 
         if not user_message:
             logger.warning("Empty chat message received.")
             return jsonify({"reply": "Please enter a message."}), 400
 
-        robot = ai_class()
+        # Create AI instance with selected model (or default if None)
+        robot = ai_class(model=selected_model)
         robot.set_user_question(user_message)
         ai_reply = robot.get_ai_response()
 
