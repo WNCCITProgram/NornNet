@@ -8,8 +8,8 @@ logger = setup_logger('main_app', 'main_app.log', console_output=False)
 
 # Create a Blueprint with /nornnet as the URL prefix
 # To run locally: Uncomment the first one, Comment the second one
-nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/', template_folder='templates')
-#nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/nornnet', template_folder='templates')
+# nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/', template_folder='templates')
+nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/nornnet', template_folder='templates')
 
 # Get post is for the user input and ai response
 @nornnet_bp.route("/", methods=["GET", "POST"])
