@@ -46,18 +46,18 @@ def chat():
 
         if not user_message:
             logger.warning("Empty chat message received.")
-            return jsonify({"reply": "Please enter a message."}), 
+            return jsonify({"reply": "Please enter a message."}), 400
 
         robot = ai_class()
         robot.set_user_question(user_message)
         ai_reply = robot.get_ai_response()
 
         logger.info("AI reply generated successfully.")
-        return jsonify({"reply": ai_reply}), 
+        return jsonify({"reply": ai_reply}), 200
 
     except Exception as e:
         logger.error(f"Chat endpoint error: {e}")
-        return jsonify({"reply": "Error: Could not connect to NornNet server."}),
+        return jsonify({"reply": "Error: Could not connect to NornNet server."}), 500
 
 
 @nornnet_bp.route('/docs')
