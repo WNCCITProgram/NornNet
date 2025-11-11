@@ -1,5 +1,5 @@
 
-from flask import Flask, Blueprint, render_template, request, abort
+from flask import Flask, Blueprint, render_template, request, jsonify, abort
 from ai_class import ai_class
 from app_logging import setup_logger
 
@@ -8,8 +8,8 @@ logger = setup_logger('main_app', 'main_app.log', console_output=False)
 
 # Create a Blueprint with /nornnet as the URL prefix
 # To run locally: Uncomment the first one, Comment the second one
-# nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/', template_folder='templates')
-nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/nornnet', template_folder='templates')
+nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/', template_folder='templates')
+#nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/nornnet', template_folder='templates')
 
 # Get post is for the user input and ai response
 @nornnet_bp.route("/", methods=["GET", "POST"])
@@ -34,6 +34,30 @@ def hello():
 
     return render_template("index.html", user_input=user_input, ai_response=ai_response)
 
+# ---------------------------------------------------------------
+# NEW Route: /nornnet/chat — asynchronous API endpoint for JS fetch()
+# ---------------------------------------------------------------
+@nornnet_bp.route("/chat", methods=["POST"])
+def chat():
+    """Handle AJAX chat requests from the frontend and return AI response as JSON."""
+    try:
+        user_message = request.json.get("message", "").strip()
+        logger.info(f"Received chat message: {user_message}")
+
+        if not user_message:
+            logger.warning("Empty chat message received.")
+            return jsonify({"reply": "Please enter a message."}), 400
+
+        robot = ai_class()
+        robot.set_user_question(user_message)
+        ai_reply = robot.get_ai_response()
+
+        logger.info("AI reply generated successfully.")
+        return jsonify({"reply": ai_reply}), 200
+
+    except Exception as e:
+        logger.error(f"Chat endpoint error: {e}")
+        return jsonify({"reply": "Error: Could not connect to NornNet server."}), 500
 
 
 @nornnet_bp.route('/docs')
