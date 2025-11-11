@@ -64,34 +64,33 @@
 
     // Display user's message + timestamp
     chatbox.innerHTML += `
-      <div>
+      <div style="margin-bottom: 8px;">
         <strong>You:</strong> ${message}
         <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
       </div>`;
   
-    // Clear input box
+    // Clear input 
     userInput.value = "";
 
     // Smooth scroll to bottom
-    chatbox.scrollTop = chatbox.scrollHeight;
+    chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
 
     // Add typing indicator (user feedback while AI is responding)
     const typingIndicator = document.createElement("div");
     typingIndicator.id = "typing";
     typingIndicator.innerHTML = "<em>NornNet is weaving your fate...</em>";
     chatbox.appendChild(typingIndicator);
+    chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
 
     try {
       // Send POST request to FLASK backend (/chat endpoint)
-      const response = await fetch("/chat", {
+      const response = await fetch("/nornnet/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ message: message }),
-      })
+      });
 
-      // Wait for backend JSON reply
+      // Parse reply
       const data = await response.json();
 
       // Remove typing indicator
@@ -99,26 +98,26 @@
 
       // Display AI response + timestamp
       chatbox.innerHTML += `
-        <div>
+        <div style="margin-bottom: 8px;">
           <strong>Norn:</strong> ${data.reply}
           <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
-        <div>`;
+        </div>`;
       
       // Smooth scroll animation to latest message
       chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
 
     } catch (error) {
       // Handle any backend or network errors gracefully
+      console.error("Chat Error:", error);
       chatbox.removeChild(typingIndicator);
       chatbox.innerHTML += `
-        <div style="color:red;">
+        <div style="color:red; margin-bottom: 8px;">
           <strong>Error:</strong> Could not connect to NornNet server.
           <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
         </div>`;
       chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });  
     }
   }
-
   </script>
 
 {% endblock %}
