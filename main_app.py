@@ -8,8 +8,8 @@ logger = setup_logger('main_app', 'main_app.log', console_output=False)
 
 # Create a Blueprint with /nornnet as the URL prefix
 # To run locally: Uncomment the first one, Comment the second one
-# nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/    ', template_folder='templates')
-nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/nornnet    ', template_folder='templates')
+# nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/', template_folder='templates')
+nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/nornnet', template_folder='templates')
 
 # Get post is for the user input and ai response
 @nornnet_bp.route("/", methods=["GET", "POST"])
@@ -21,10 +21,16 @@ def hello():
     # Set up the ai class
     robot = ai_class()
 
-    if request.method == "Post":
-        user_input = request.form["user_input"]
-        robot.set_user_question(user_input)
-        ai_response = robot.get_ai_response()
+    if request.method == "POST":
+        try:
+            user_input = request.form["user_input"]
+            logger.info(f"User question: {user_input}")
+            robot.set_user_question(user_input)
+            ai_response = robot.get_ai_response()
+            logger.info(f"AI response generated successfully")
+        except Exception as e:
+            logger.error(f"Error processing AI request: {e}")
+            ai_response = "Error: Could not connect to NornNet server."
 
     return render_template("index.html", user_input=user_input, ai_response=ai_response)
 

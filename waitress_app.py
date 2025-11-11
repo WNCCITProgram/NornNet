@@ -4,20 +4,37 @@ Description: This script sets up and runs a Waitress WSGI server
 to serve a Flask web application.
 """
 
-from main_app import app
 import os
+import sys
 from sys import path
-from app_logging import setup_logger
 
 # Add current directory to path to ensure imports work
 path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-THREADS = 64
-
-# Set up logging (file only; no console output)
+# Set up logging BEFORE importing main_app
+from app_logging import setup_logger
 logger = setup_logger('waitress_app', 'waitress_app.log', console_output=False)
+logger.info(f"=== Waitress startup at {os.getpid()} ===")
 logger.info(f"Current working directory: {os.getcwd()}")
-logger.info("Flask app imported successfully")
+logger.info(f"Python version: {sys.version}")
+
+# Flush immediately to ensure log writes
+for handler in logger.handlers:
+    handler.flush()
+
+# Now import the Flask app
+try:
+    from main_app import app
+    logger.info("Flask app imported successfully")
+    for handler in logger.handlers:
+        handler.flush()
+except Exception as e:
+    logger.error(f"Failed to import main_app: {e}")
+    for handler in logger.handlers:
+        handler.flush()
+    raise
+
+THREADS = 64
 
 
 def main():
@@ -38,11 +55,19 @@ def main():
     logger.info(f"Host binding: {host}")
     logger.info(f"Working directory: {os.getcwd()}")
     logger.info(f"Python PID: {os.getpid()}")
+    
+    # Force flush logs
+    for handler in logger.handlers:
+        handler.flush()
 
     try:
         from waitress import serve
         logger.info(f"About to call serve() with app={app}, host={host}, port={port}")
         logger.info(f"Calling serve with threads={THREADS}, connection_limit=1000")
+        
+        # Force flush before blocking call
+        for handler in logger.handlers:
+            handler.flush()
         
         # Call serve - this blocks until server stops
         serve(
@@ -64,6 +89,10 @@ def main():
 
 if __name__ == "__main__":
     logger.info("Running as main script")
+    for handler in logger.handlers:
+        handler.flush()
     main()
 else:
     logger.info("Module imported by IIS")
+    for handler in logger.handlers:
+        handler.flush()

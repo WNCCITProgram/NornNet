@@ -23,15 +23,21 @@ class ai_class():
         return self.user_question
 
     def get_ai_response(self):
-        # get a response from the modle
-        self.ai_response = ollama.chat(model="gemma3:4b", messages=[
-                                {"role": "user", "content": self.user_question}])
+        try:
+            # Get a response from the module
+            self.ai_response = ollama.chat(model="gemma3:4b", messages=[
+                                    {"role": "user", "content": self.user_question}])
 
-        # Checks if the AI gave the user output
-        if 'message' in self.ai_response:
-            return self.ai_response['message']['content']
-        else:
-            return 'Sorry something went wrong.'
+            # Checks if the AI gave the user output
+            if 'message' in self.ai_response:
+                return self.ai_response['message']['content']
+            else:
+                return 'Sorry something went wrong.'
+        except Exception as e:
+            # Log the specific error for debugging
+            error_msg = f"Ollama connection error: {str(e)}"
+            print(error_msg)  # This will go to waitress_app.log
+            return f"Error: Could not connect to NornNet server. ({str(e)})"
         
 
     def get_ai_prompt(self):
