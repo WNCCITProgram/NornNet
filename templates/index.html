@@ -15,6 +15,13 @@
                 margin: 0 auto 10px auto; text-align: left;">
     </div>
 
+    {%- if turnstile_enabled %}
+    <!-- Cloudflare Turnstile widget (AJAX flow uses callback to capture token) -->
+    <div id="turnstile-container" style="margin: 10px auto; width: 400px; text-align: center;">
+      <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-callback="onTurnstileSuccess"></div>
+    </div>
+    {%- endif %}
+
     <!-- User Input and Button -->
     <div style="margin-top: 10px;">
       <input type="text" id="user_input" placeholder="Ask something..." 
@@ -87,13 +94,23 @@
       const modelSelect = document.getElementById("model_select");
       const selectedModel = modelSelect.value;
 
+      // If Turnstile is enabled, ensure token exists
+  if (window._turnstile_token === null && {{ 'true' if turnstile_enabled else 'false' }}) {
+        // No token yet
+        chatbox.removeChild(typingIndicator);
+        chatbox.innerHTML += `<div style="color:red; margin-bottom: 8px;"><strong>Verification required:</strong> Please complete the bot check above before sending.</div>`;
+        chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+        return;
+      }
+
       // Send POST request to FLASK backend (/chat endpoint) with selected model
       const response = await fetch("/nornnet/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ 
           message: message,
-          model: selectedModel  // Include selected model in request
+          model: selectedModel,  // Include selected model in request
+          'cf-turnstile-response': window._turnstile_token || null
         }),
       });
 
@@ -102,6 +119,27 @@
 
       // Remove typing indicator
       chatbox.removeChild(typingIndicator);
+
+      // Check if the response was successful or if validation failed
+      if (!response.ok) {
+        // Validation failed or other error - show error message
+        chatbox.innerHTML += `
+          <div style="color:red; margin-bottom: 8px;">
+            <strong>Norn:</strong> ${data.reply || 'An error occurred'}
+            <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
+          </div>`;
+        
+        // Reset Turnstile widget so user can try again with fresh token
+        if (typeof turnstile !== 'undefined') {
+          const turnstileWidget = document.querySelector('.cf-turnstile');
+          if (turnstileWidget) {
+            turnstile.reset(turnstileWidget);
+            window._turnstile_token = null;
+          }
+        }
+        chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+        return;
+      }
 
       // Display AI response + timestamp
       chatbox.innerHTML += `
@@ -112,6 +150,17 @@
       
       // Smooth scroll animation to latest message
       chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+
+      // Reset Turnstile widget for next message (if enabled) - only on success
+      if (typeof turnstile !== 'undefined' && window._turnstile_token !== null) {
+        // Find the widget ID (Turnstile assigns this automatically)
+        const turnstileWidget = document.querySelector('.cf-turnstile');
+        if (turnstileWidget) {
+          // Reset the widget to get a fresh token for the next message
+          turnstile.reset(turnstileWidget);
+          window._turnstile_token = null; // Clear the token
+        }
+      }
 
     } catch (error) {
       // Handle any backend or network errors gracefully

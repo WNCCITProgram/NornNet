@@ -1,7 +1,13 @@
 
 from flask import Flask, Blueprint, render_template, request, jsonify, abort
-from ai_class import ai_class, AVAILABLE_MODELS
+from ai_class import ai_class, AVAILABLE_MODELS, MODEL
 from app_logging import setup_logger
+import os
+import requests
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Set up logging (file only, no console output)
 logger = setup_logger('main_app', 'main_app.log', console_output=False)
@@ -48,6 +54,23 @@ def get_models():
         return jsonify({"models": []}), 500
 
 
+def validate_turnstile(token: str, secret: str, remoteip: str = None) -> dict:
+    """Validate a Cloudflare Turnstile token using the siteverify API.
+
+    Returns the JSON response from Cloudflare (dict).
+    """
+    url = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+    try:
+        payload = {"secret": secret, "response": token}
+        if remoteip:
+            payload["remoteip"] = remoteip
+        resp = requests.post(url, data=payload, timeout=5)
+        return resp.json()
+    except Exception as e:
+        logger.error(f"Turnstile validation error: {e}")
+        return {"success": False, "error": str(e)}
+
+
 # ---------------------------------------------------------------
 # NEW Route: /nornnet/chat — asynchronous API endpoint for JS fetch()
 # ---------------------------------------------------------------
@@ -57,6 +80,19 @@ def chat():
     try:
         user_message = request.json.get("message", "").strip()
         selected_model = request.json.get("model", None)  # Get model from request
+        # Cloudflare Turnstile token sent from frontend (AJAX)
+        turnstile_token = request.json.get('cf-turnstile-response', None)
+        # Validate Turnstile if secret configured
+        turnstile_secret = os.getenv('TURNSTILE_SECRET')
+        if turnstile_secret:
+            if not turnstile_token:
+                logger.warning('Missing Turnstile token in chat request')
+                return jsonify({'reply': 'Verification missing. Please complete the bot check.'}), 400
+            remoteip = request.headers.get('CF-Connecting-IP') or request.headers.get('X-Forwarded-For') or request.remote_addr
+            valid = validate_turnstile(turnstile_token, turnstile_secret, remoteip)
+            if not valid.get('success', False):
+                logger.warning(f"Turnstile validation failed: {valid}")
+                return jsonify({'reply': 'Verification failed. Please try again.'}), 400
         logger.info(f"Received chat message: {user_message}")
         if selected_model:
             logger.info(f"Using model: {selected_model}")
@@ -98,7 +134,14 @@ logger.info("Blueprint 'nornnet' registered successfully")
 def inject_globals():
     # Provide the current year to templates for footer
     from datetime import datetime
-    return dict(current_year=datetime.utcnow().year)
+    # Provide Turnstile site key (optional) so templates can render the widget
+    turnstile_site_key = os.getenv('TURNSTILE_SITE_KEY', '')
+    turnstile_enabled = bool(os.getenv('TURNSTILE_SECRET')) and bool(turnstile_site_key)
+    return dict(
+        current_year=datetime.utcnow().year,
+        turnstile_site_key=turnstile_site_key,
+        turnstile_enabled=turnstile_enabled
+    )
 
 
 @app.before_request

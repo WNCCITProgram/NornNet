@@ -50,6 +50,18 @@
     <!-- Optional Bootstrap JS for components (not required for layout) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-" crossorigin="anonymous"></script>
     
+    {%- if turnstile_enabled %}
+    <!-- Cloudflare Turnstile API -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script>
+      // Global token holder and callback for Turnstile
+      // The widget is auto-reset after each successful message to generate fresh tokens
+      window._turnstile_token = null;
+      function onTurnstileSuccess(token) {
+        window._turnstile_token = token;
+      }
+    </script>
+    {%- endif %}
     <script>
     // Load available AI models into header dropdown
     async function loadModels() {
