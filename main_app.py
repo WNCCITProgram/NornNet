@@ -11,6 +11,9 @@ load_dotenv()
 
 # Set up logging (file only, no console output)
 logger = setup_logger('main_app', 'main_app.log', console_output=False)
+logger.info("=== main_app.py module loaded ===")
+logger.info(f"Python executable: {os.sys.executable}")
+logger.info(f"Current working directory: {os.getcwd()}")
 
 # Create a Blueprint with /nornnet as the URL prefix
 # To run locally: Uncomment the first one, Comment the second one

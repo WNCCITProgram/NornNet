@@ -10,6 +10,17 @@ import os
 import re
 
 
+class FlushingTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
+    """
+    Custom handler that forces immediate flushing after every log entry.
+    Critical for IIS/Waitress environments where logs may not appear otherwise.
+    """
+    def emit(self, record):
+        super().emit(record)
+        if self.stream:
+            self.stream.flush()
+
+
 def setup_logger(logger_name, log_filename, console_output=False):
     """
     Set up a logger with file rotation and optional console output.
@@ -38,8 +49,8 @@ def setup_logger(logger_name, log_filename, console_output=False):
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
     
-    # Use TimedRotatingFileHandler for daily rotation
-    file_handler = logging.handlers.TimedRotatingFileHandler(
+    # Use custom FlushingTimedRotatingFileHandler for daily rotation with immediate flush
+    file_handler = FlushingTimedRotatingFileHandler(
         log_file, when="midnight", interval=1, backupCount=7, encoding="utf-8"
     )
     
