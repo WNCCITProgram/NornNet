@@ -57,12 +57,17 @@ MODEL = "llama3.1:8b-instruct-q4_K_M"
 
 class ai_class():
 
-    def __init__(self, model=None):
+    def __init__(self, model=None, memory_enabled=True):
         self.ai_response = ""
         self.user_question = ""
         self.ai_prompt = ""
         # Use provided model or fall back to default MODEL constant
         self.model = model if model else MODEL
+
+        # MEMORY SETTINGS [set to false if you want to disable chat logging]
+        self.memory_enabled = memory_enabled
+        self.memory_enabled = True
+        self.chat_log = []  # <-- store conversation history
 
     # === Getters === #
     def get_user_question(self):
@@ -76,14 +81,22 @@ class ai_class():
             # - use_mlock: Lock model in RAM to prevent swapping (set True if enough RAM)
             # - num_ctx: Context window size (reduce if memory constrained)
             # - num_thread: Number of threads (adjust based on CPU cores available)
-            self.ai_response = ollama.chat(
-                model=self.model,  # Use instance model instead of global MODEL
-                messages=[
+            
+            # JOE SCOTT 11/12/2025: CHAT HISTORY IS LOGGED HERE
+            messages = []
+            if self.memory_enabled and self.chat_log:
+                messages.extend(self.chat_log)
+
+            messages=[
                     {
                         "role": "user",
                         "content": self.user_question
                     }
-                ],
+                ]
+            
+            self.ai_response = ollama.chat(
+                model=self.model,  # Use instance model instead of global MODEL
+                messages=messages,
                 options={
                     "use_mmap": True,     # Enable memory-mapped I/O for efficient loading
                     "use_mlock": True,    # Set to True if you have enough RAM to lock model
@@ -98,9 +111,17 @@ class ai_class():
 
             # Checks if the AI gave the user output
             if 'message' in self.ai_response:
-                return self.ai_response['message']['content']
+                content = self.ai_response['message']['content']
             else:
-                return 'Sorry something went wrong.'
+                content = "Sorry, something went wrong."
+
+            # Save to chat log
+            if self.memory_enabled:
+                self.chat_log.append({"role": "user", "content": self.user_question})
+                self.chat_log.append({"role": "assistant", "content": content})
+
+            return content
+        
         except Exception as e:
             # Log the specific error for debugging
             error_msg = f"Ollama connection error: {str(e)}"
@@ -117,6 +138,27 @@ class ai_class():
 
     def set_ai_prompt(self, ai_prompt):
         self.ai_prompt = ai_prompt
+
+    # === Memory Methods === #
+
+    def clear_memory(self):
+        """Reset the chat log."""
+        self.chat_log = []
+
+    def save_memory(self, filepath="ai_memory.json"):
+        """Save chat log to a file."""
+        import json
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(self.chat_log, f, ensure_ascii=False, indent=2)
+
+    def load_memory(self, filepath="ai_memory.json"):
+        """Load chat log from a file."""
+        import os, json
+        if os.path.exists(filepath):
+            with open(filepath, "r", encoding="utf-8") as f:
+                self.chat_log = json.load(f)
+        else:
+            self.chat_log = []
 
 
 def main():
