@@ -104,7 +104,26 @@
       }
 
       // Send POST request to FLASK backend (/chat endpoint) with selected model
-      const response = await fetch("/nornnet/chat", {
+      
+      /* Joe Scott 11/12/2025: I FOUND THE BUG 
+       * The issue between running it locally and running it on the web is
+       * that /nornnet/chat and /chat are two different things depending on
+       * how you run the program. The 404 error came from the fact that the
+       * route "/nornnet" does not exist locally and can only be run under
+       * "/". So in summary...
+       * 
+       * - Website ==> fetch("/nornnet/chat")
+       * - Local   ==> fetch("/chat")
+       * 
+       * This issue also connect to the main_app.py file on the line 110 as of now
+       * 
+       * Next order of business would be figuring out how we can change this
+       * in the system, because no one wants to jump back and forth here.
+       */
+
+      const response = await fetch("/nornet/chat", {
+
+
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ 
