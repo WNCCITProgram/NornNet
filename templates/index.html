@@ -33,6 +33,19 @@
 
   <script>
 
+  // Fallback: define getBasePath locally if not provided by base.html yet
+  if (typeof getBasePath !== 'function') {
+    function getBasePath() {
+      const path = window.location.pathname || '';
+      return path.startsWith('/nornnet') ? '/nornnet' : '';
+    }
+  }
+
+  // Detect if Turnstile is enabled by checking for the widget or API presence
+  function isTurnstileEnabled() {
+    return (typeof turnstile !== 'undefined') || !!document.querySelector('.cf-turnstile');
+  }
+
   /*
     Helper Function: getTimestamp()
     PURPOSE: Create a readable timestamp for chat messages.
@@ -94,8 +107,8 @@
       const modelSelect = document.getElementById("model_select");
       const selectedModel = modelSelect.value;
 
-      // If Turnstile is enabled, ensure token exists
-  if (window._turnstile_token === null && {{ 'true' if turnstile_enabled else 'false' }}) {
+  // If Turnstile is enabled, ensure token exists
+  if (isTurnstileEnabled() && window._turnstile_token === null) {
         // No token yet
         chatbox.removeChild(typingIndicator);
         chatbox.innerHTML += `<div style="color:red; margin-bottom: 8px;"><strong>Verification required:</strong> Please complete the bot check above before sending.</div>`;
@@ -121,9 +134,7 @@
        * in the system, because no one wants to jump back and forth here.
        */
 
-      const response = await fetch("/nornet/chat", {
-
-
+  const response = await fetch(`${getBasePath()}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ 

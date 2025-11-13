@@ -63,10 +63,16 @@
     </script>
     {%- endif %}
     <script>
+    // Determine base path so app works at site root and under /nornnet
+    function getBasePath() {
+      const path = window.location.pathname || '';
+      return path.startsWith('/nornnet') ? '/nornnet' : '';
+    }
+
     // Load available AI models into header dropdown
     async function loadModels() {
       try {
-        const response = await fetch("/nornnet/models");
+        const response = await fetch(`${getBasePath()}/models`);
         const data = await response.json();
         const modelSelect = document.getElementById("model_select");
         
