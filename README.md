@@ -152,6 +152,7 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 🔄 In progress
 
 - Create `main_app.py` with routes for the homepage (`/`) and chat (`/chat`).
+  - Dynamic base path support: set `BASE_PATH=/nornnet` in `.env` for production; leave unset locally to serve at root.
 - Build `index.html` with a chat history, input, and send button.
 - Implement minimal CSS to make the UI usable.
 - Download the student handbook onto the server for the AI to reference

@@ -103,7 +103,7 @@ class ai_class():
                     # Context window (default 2048, reduce if low memory)
                     "num_ctx": 2048,
                     # Streaming response (set to True for real-time streaming)
-                    "stream": False,
+                    "stream": True,
                     # CPU threads to use (adjust based on your CPU)
                     "num_thread": 8
                 }
