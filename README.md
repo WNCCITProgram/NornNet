@@ -149,7 +149,7 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 
 ## Flask Web Server
 
-🔄 In progress
+✅ Complete — Initial release
 
 - Create `main_app.py` with routes for the homepage (`/`) and chat (`/chat`).
   - Dynamic base path support: set `BASE_PATH=/nornnet` in `.env` for production; leave unset locally to serve at root.
@@ -163,20 +163,19 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 
 ## Phase 2: Frontend-Backend Communication
 
-☐ Todo
+✅ Complete — Initial release
 
 - Use `main.js` to send user messages to `/chat` and append both user and bot messages to the DOM.
 
 ## Phase 3 — Private AI Integration (self-hosted)
 
-☐ Todo
+✅ Complete — Initial release
 
 - CPU-only machines: prefer quantized models (GGML / llama.cpp) or small transformer models.
 - Create a model server and expose an internal HTTP endpoint.
 - Secure the private server: mTLS / API key, and run behind an IIS server which runs waitress
-- Add support for streaming responses if the model server supports it.
 
-# Tasks for the week of 11/2/25 - 11/9/25
+# Tasks for the week of 11/10/25 - 11/16/25
 
 - Make the ai function a class for expandability.
   - DO NOT chage the AI function file only make a new file for the class.
@@ -193,7 +192,7 @@ The Ollama server is now running as a persistent service on port 11434, accessib
   - Research using CAG or RAG
 - Add github repository address to docs page.
 - Add responsive design to user interface. The interface should resize for different devices. Look at ChatGPT for an example
-- 
+- - Add support for streaming responses if the model server supports it. This may provide a faster start to the response and a better user experience.
 
 ## Phase 4 — Privacy, Logging & Data Handling
 
