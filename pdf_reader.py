@@ -1,3 +1,4 @@
+# pip install pdfreader
 from pdfreader import SimplePDFViewer
 import os
 
