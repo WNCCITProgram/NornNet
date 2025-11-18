@@ -88,6 +88,12 @@ class ai_class():
                 messages.extend(self.chat_log)
 
             messages=[
+                    # System prompt to set AI behavior 
+                    {
+                        "role": "system",
+                        "content": "You are an ai teacher that is going to answer questions based on the prompt provided: " + self.ai_prompt
+                    },
+                    # User question
                     {
                         "role": "user",
                         "content": self.user_question
