@@ -6,7 +6,6 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 
 - Eliezer Lamien
 - Owen Osmera
-- Christi Pendergraft
 - Joe Scott
 - Caleb Stewart
 - Shawn Noon
@@ -31,8 +30,9 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 
 ## Personal Research
 
-Integrate an LLM into flask with python
-https://github.com/ollama/ollama-python
+- Integrate an LLM into flask with python https://github.com/ollama/ollama-python
+- Create, read, and write to a PDF file https://github.com/py-pdf/pypdf
+- Chat history/Memory/Context https://github.com/digithree/ollama-rag
 
 ## Create Pull Request on NornNet Github
 
@@ -153,9 +153,10 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 
 ## Flask Web Server
 
-🔄 In progress
+✅ Complete — Initial release
 
 - Create `main_app.py` with routes for the homepage (`/`) and chat (`/chat`).
+  - Dynamic base path support: set `BASE_PATH=/nornnet` in `.env` for production; leave unset locally to serve at root.
 - Build `index.html` with a chat history, input, and send button.
 - Implement minimal CSS to make the UI usable.
 - Download the student handbook onto the server for the AI to reference
@@ -166,18 +167,36 @@ The Ollama server is now running as a persistent service on port 11434, accessib
 
 ## Phase 2: Frontend-Backend Communication
 
-☐ Todo
+✅ Complete — Initial release
 
 - Use `main.js` to send user messages to `/chat` and append both user and bot messages to the DOM.
 
 ## Phase 3 — Private AI Integration (self-hosted)
 
-☐ Todo
+✅ Complete — Initial release
 
 - CPU-only machines: prefer quantized models (GGML / llama.cpp) or small transformer models.
 - Create a model server and expose an internal HTTP endpoint.
 - Secure the private server: mTLS / API key, and run behind an IIS server which runs waitress
-- Add support for streaming responses if the model server supports it.
+
+# Tasks for the week of 11/10/25 - 11/16/25
+
+- Make the ai function a class for expandability.
+  - DO NOT chage the AI function file only make a new file for the class.
+  - SetUserQuestion
+  - GetUserQuestion
+  - GetAIResponse
+  - SetAIPrompt
+  - GetAIPrompt
+- Find a way to get a pdf reader in python and integrate that into the code.
+  - How do we add the student handbook as context for the ai?
+  - This can be a function for class we just need a way to read the file to create words for prompting the ai.
+- Find out if context can be enabled on ollama.
+  - Integrate this into the code so the AI can have context
+  - Research using CAG or RAG
+- Add github repository address to docs page.
+- Add responsive design to user interface. The interface should resize for different devices. Look at ChatGPT for an example
+- - Add support for streaming responses if the model server supports it. This may provide a faster start to the response and a better user experience.
 
 ## Phase 4 — Privacy, Logging & Data Handling
 
