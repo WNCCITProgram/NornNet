@@ -86,7 +86,7 @@ The implementation is split into phases so the team can ship incrementally.
 5. Pull a Model to test with:
   
 <<<<<<< Updated upstream
-    ```ollama pull gemma 3:4b```
+    ```ollama pull gemma3:4b```
 =======
     ```ollama pull gemma3:4b```
 >>>>>>> Stashed changes
