@@ -4,7 +4,7 @@ Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot th
 
 ## Team Members
 
-- Elizier Lamien
+- Eliezer Lamien
 - Owen Osmera
 - Joe Scott
 - Caleb Stewart
@@ -85,7 +85,11 @@ The implementation is split into phases so the team can ship incrementally.
 
 5. Pull a Model to test with:
   
-    ```ollama pull gemma 3:4b```
+<<<<<<< Updated upstream
+    ```ollama pull gemma3:4b```
+=======
+    ```ollama pull gemma3:4b```
+>>>>>>> Stashed changes
 
 ### ✅ Set Up Ollama as a Windows Service (using NSSM)
 
