@@ -10,6 +10,7 @@ body {
   color: #111;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-colr 0.3s, color 0.3s;
 }
 
 /* Card container */
@@ -23,6 +24,7 @@ body {
   width: 100%;
   /* Allow card to size naturally and not force viewport constraints */
   display: block;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 h1 {
@@ -30,9 +32,10 @@ h1 {
   font-size: 2rem;
   color: #111;
   letter-spacing: -0.02em;
+  transition: color 0.3s;
 }
 
-p { color: #333; margin: 0.5rem 0 0 0; }
+p { color: #333; margin: 0.5rem 0 0 0; transition: color 0.3s; }
 
 /* Make any folder links look minimal and Bootstrap-like */
 ul.folders {
@@ -56,6 +59,7 @@ a.folder-link {
   border-radius: 6px;
   font-weight: 600;
   font-size: 0.95rem;
+  transition: background-color 0.3s;
 }
 
 a.folder-link:hover { background: #0847c5; }
@@ -69,14 +73,70 @@ a.folder-link:hover { background: #0847c5; }
 }
 
 /* Subtle top nav styling to match spartan design */
-.nav-link { color: #333 !important; padding: 0.35rem 0.6rem; }
+.nav-link { color: #333 !important; padding: 0.35rem 0.6rem; transition: color 0.3s; }
 .nav-link:hover { color: #0d6efd !important; }
 
 /* Footer muted look */
-.site-footer { border-top: 1px solid rgba(16,24,32,0.04); }
+.site-footer { border-top: 1px solid rgba(16,24,32,0.04); transition: background-color 0.3s, color 0.3s; }
 
 /* Inline helpers moved from base.html to central stylesheet */
 html, body { height: 100%; }
 .page-wrapper { min-height: 100vh; display: flex; flex-direction: column; }
 .site-main { flex: 1 0 auto; display: flex; align-items: center; justify-content: center; padding: 2rem 0; }
 .site-footer { flex-shrink: 0; }
+
+/* ---------------------- DARK MODE STYLES ----------------------- */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode .card {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+body.dark-mode h1 {
+  color: #f0f0f0;
+}
+
+body.dark-mode p {
+  color: #cfcfcf;
+}
+
+body.dark-mode .nav-link {
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode .nav-link:hover {
+  color: #90caf9 !important;
+}
+
+body.dark-mode .site-footer {
+  background-color: #1a1a1a;
+  color: #aaa;
+  border-top: 1px solid #333;
+}
+
+body.dark-mode a.folder-link {
+  background-color: #1565c0;
+  color: white;
+}
+
+body.dark-mode a.folder-link:hover {
+  background-color: #0d47a1;
+}
+
+body.dark-mode input,
+body.dark-mode button {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+body.dark-mode #chatbox {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-color: #444;
+}
