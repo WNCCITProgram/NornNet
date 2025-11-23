@@ -15,6 +15,11 @@
                 margin: 0 auto 10px auto; text-align: left;">
     </div>
 
+    <!-- VERSION LABEL -->
+    <div style="font-size:0.75em; color:grey; margin-top:-5px; margin-bottom:10px;">
+      Current Version 2.0
+    </div>
+
     {%- if turnstile_enabled %}
     <!-- Cloudflare Turnstile widget (AJAX flow uses callback to capture token) -->
     <div id="turnstile-container" style="margin: 10px auto; width: 400px; text-align: center;">
@@ -72,6 +77,22 @@
       Timestamp Display
       Smooth Scroll Animation
   */
+  
+  // Typewriter effect for NornNet responses
+  function typeWriterEffect(element, text, speed = 25) {
+    let i = 0;
+
+    function type() {
+      if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          document.getElementById("chatbox").scrollTop =
+            document.getElementById("chatbox").scrollHeight;
+        setTimeout(type, speed);
+      }
+    }
+    type();
+  }
   
   async function sendMessage() {
     // Capture input and chatbox references
@@ -158,6 +179,8 @@
             <strong>Norn:</strong> ${data.reply || 'An error occurred'}
             <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
           </div>`;
+        chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+        return;
         
         // Reset Turnstile widget so user can try again with fresh token
         if (typeof turnstile !== 'undefined') {
@@ -171,12 +194,30 @@
         return;
       }
 
-      // Display AI response + timestamp
-      chatbox.innerHTML += `
-        <div style="margin-bottom: 8px;">
-          <strong>Norn:</strong> ${data.reply}
-          <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
-        </div>`;
+      // Typewriter response
+      const botContainer = document.createElement("div");
+      botContainer.style.marginBottom = "8px";
+
+      const botLabel = document.createElement("strong");  
+      botLabel.textContent = "Norn: ";
+      botContainer.appendChild(botLabel);
+
+      // Empty element where text will animate
+      const botMessage = document.createElement("span");
+      botContainer.appendChild(botMessage);
+
+      // Timestamp 
+      const botTime = document.createElement("div");
+      botTime.style.fontSize = "0.75em";   
+      botTime.style.color = "grey";
+      botTime.textContent = getTimestamp();
+
+      // Add everything to chatbox
+      chatbox.appendChild(botContainer);
+      chatbox.appendChild(botTime);
+
+      // Start typewriter animation
+      typeWriterEffect(botMessage, data.reply, 18);
       
       // Smooth scroll animation to latest message
       chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
