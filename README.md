@@ -1,13 +1,14 @@
 # NornNet
 
-Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot that rocks!
+Visit [NornNet](https://lab.wncc.edu/nornnet). Where the Fates Weave Destiny with a Touch of AI Magic - A private AI ChatBot that rocks!
+
+
 
 ## Team Members
 
 - Eliezer Lamien
-- Owen Osmera
 - Joe Scott
-- Caleb Stewart
+- Owen Osmera
 - Shawn Noon
 
 ## Flask Tutorials
@@ -85,11 +86,7 @@ The implementation is split into phases so the team can ship incrementally.
 
 5. Pull a Model to test with:
   
-<<<<<<< Updated upstream
     ```ollama pull gemma3:4b```
-=======
-    ```ollama pull gemma3:4b```
->>>>>>> Stashed changes
 
 ### ✅ Set Up Ollama as a Windows Service (using NSSM)
 
@@ -243,145 +240,8 @@ Optional extras for the team:
 - Add simple cost/latency telemetry so the team can compare different models.
 
 ---
+### License
 
-Notes and safety:
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
-- For private hosting, pick a model size that fits your hardware. Quantized CPU models are great for demos and privacy.
-- Make privacy decisions explicit in the app UI (logging on/off, data retention).
-
-**Shared Goal**: Create an intuitive and attractive user interface.
-
-#### **Team 2: The Backend Team (Flask Core)** ⚙️
-
-This pair builds the server-side foundation of the application.
-
-- **Team 3 (Server & Routing)**: Set up the `app.py` file, initialize the Flask application, and create the routes for the home page (`/`) and the chat endpoint (`/chat`).
-- **Team 4 (Request & Response Handling)**: Implement the logic within the routes to handle incoming `POST` requests from the frontend. Manage the data flow, ensuring that user input is correctly received and that responses are sent back in the proper JSON format.
-
-**Shared Goal**: Build a stable and reliable server that connects the frontend to the AI logic.
-
-#### **Team 3: The AI Integration Team (API Connectors)** 🧠
-
-This pair focuses on the "smart" part of the chatbot.
-
-- **Team 5 (API Research & Logic)**: Research suitable conversational models on the Hugging Face Hub. Write the core Python function that takes a user's message, formats it correctly, and sends it to the Hugging Face Inference API.
-
-## Project Ideas
-
-### 1. Personal To-Do List ✅
-
-A simple, single-user application to keep track of tasks. This avoids the complexity of collaboration and multiple accounts.
-
-- **Key Features**: A user can register and log in. Once logged in, they can add tasks, mark tasks as complete, and delete them.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend)**: Set up the database models for `User` and `Task`. Create the Flask routes to add, update, and delete tasks.
-  - **Students 3 & 4 (Authentication & Forms)**: Handle the user registration and login logic. Create the web forms for adding and editing tasks.
-  - **Students 5 & 6 (Frontend)**: Design the Jinja2 templates to display the task list and forms. Apply CSS to make it look clean.
-
----
-
-### 2. Simple Recipe Book 🍲
-
-A website to display a collection of recipes. This project focuses on reading data from a database and presenting it nicely.
-
-- **Key Features**: A public homepage that lists all available recipes. Clicking a recipe shows a detailed view with ingredients and instructions. An admin page allows for adding or editing recipes.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Create the `Recipe` model in the database and populate it with a few examples. Write the routes to show all recipes and a single recipe detail page.
-  - **Students 3 & 4 (Admin Panel)**: Build a simple admin page (no complex login needed at first) with a form to add new recipes to the database.
-  - **Students 5 & 6 (Frontend)**: Design the templates for the recipe list and the detailed recipe view, focusing on readability.
-
----
-
-### 3. Micro-Blog ✍️
-
-A single-author blog where one person can log in to post updates, and the public can read them. This is a great introduction to content management.
-
-- **Key Features**: A login page for the author. An interface for the author to create, edit, and delete posts. A public-facing page that lists all posts chronologically.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Create the `User` and `Post` models. Implement the routes for creating and deleting posts.
-  - **Students 3 & 4 (Authentication)**: Implement a simple login/logout system for the single author. Protect the "new post" page so only the author can access it.
-  - **Students 5 & 6 (Frontend)**: Design the templates for the main blog feed and the form for creating a new post.
-
----
-
-### 4. Simple Guestbook 📖
-
-A classic web project where visitors can leave a short message. It's a great way to learn how to handle form submissions.
-
-- **Key Features**: A single page that displays a list of messages. A form where a visitor can enter their name and a message to be added to the list.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Create a simple `Message` model (name, content, timestamp). Write the single Flask route that both displays messages and handles the form submission for new ones.
-  - **Students 3 & 4 (Form Handling)**: Create the web form for submitting a new message and add basic validation (e.g., name and message cannot be empty).
-  - **Students 5 & 6 (Frontend)**: Design the single Jinja2 template that shows the list of messages and the submission form.
-
----
-
-### 5. URL Shortener (Basic Version) 🔗
-
-A tool that takes a long URL and generates a short link. This is an excellent project for understanding routes and database lookups.
-
-- **Key Features**: A homepage with a form to submit a long URL. The app generates a unique short code, saves both URLs, and displays the new short link. When the short link is visited, the user is redirected to the original URL.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Core Logic & Database)**: Design the `Link` model. Write the function to generate a random, unique short code.
-  - **Students 3 & 4 (Routes)**: Create the main route for the submission form and the dynamic route that captures the short code and performs the redirect.
-  - **Students 5 & 6 (Frontend)**: Design the simple HTML form and the result page that shows the user their shortened URL.
-
----
-
-### 6. Event Calendar 📅
-
-A simple site that lists upcoming events. This project avoids the complexity of ticketing and user roles.
-
-- **Key Features**: A page that lists events with their date, time, and description. An admin area to add, edit, or delete events.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Create the `Event` model (title, date, description). Write the public route to display the list of all events.
-  - **Students 3 & 4 (Admin Panel)**: Build the forms and routes for the admin to perform CRUD (Create, Read, Update, Delete) operations on events.
-  - **Students 5 & 6 (Frontend)**: Design the Jinja2 templates for the public event list and style them to look like a calendar or agenda.
-
----
-
-### 7. Simple Poll App 📊
-
-An application where an admin can create a single poll and anyone can vote and see the results.
-
-- **Key Features**: An admin page to create a poll with a question and a few options. A public voting page. A results page that shows how many votes each option received.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Design models for `Poll` and `Vote`. Create the route that handles saving a new poll created by the admin.
-  - **Students 3 & 4 (Voting & Results)**: Create the routes for the voting page (which records a vote) and the results page (which counts the votes).
-  - **Students 5 & 6 (Frontend)**: Design the three pages: the admin creation form, the public voting page, and the results page.
-
----
-
-### 8. Digital Flashcard App 🧠
-
-A study tool where a user can create decks of flashcards and quiz themselves.
-
-- **Key Features**: A user can create a "deck." Within a deck, they can add "cards," each with a front (question) and a back (answer). A quiz mode displays the front and reveals the back on a button click.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Design the `Deck` and `Card` models. Create routes for viewing decks and the cards within them.
-  - **Students 3 & 4 (Forms & Logic)**: Create the forms for adding new decks and new cards. Implement the logic for the "quiz" page.
-  - **Students 5 & 6 (Frontend & Interactivity)**: Design the templates. Use a small amount of JavaScript to handle the "flip card" functionality on the quiz page.
-
----
-
-### 9. Simple Contact Book 📇
-
-A private, single-user address book to store contact information.
-
-- **Key Features**: A user can log in. They can add contacts with a name, phone number, and email. They can view, edit, and delete their contacts.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Create `User` and `Contact` models. Write the routes for adding, editing, and deleting contacts.
-  - **Students 3 & 4 (Authentication & Forms)**: Handle user login. Create the form for adding/editing a contact.
-  - **Students 5 & 6 (Frontend)**: Design the main dashboard that lists all contacts and the form pages.
-
----
-
-### 10. "Quote of the Day" Website 💬
-
-A very simple website that displays a new, random quote each day.
-
-- **Key Features**: A database of quotes. The homepage displays one random quote. An admin page allows adding new quotes to the database.
-- **Task Breakdown**:
-  - **Students 1 & 2 (Backend & Database)**: Create a `Quote` model (text, author). Write the main route that selects a random quote from the database and passes it to the template.
-  - **Students 3 & 4 (Admin Panel)**: Build a simple form and route for an admin to add new quotes.
-  - **Students 5 & 6 (Frontend)**: Design a visually appealing homepage to display the quote of the day.
+Copyright (c) 2025 WNCC IT Program
