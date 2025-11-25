@@ -6,6 +6,7 @@ Purpose: Early version of ai implementation in python for web server
 
 
 import ollama
+import pdf_reader
 
 # this function gets responses form the ai
 
