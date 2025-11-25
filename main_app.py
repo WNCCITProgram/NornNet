@@ -37,7 +37,7 @@ def hello():
     ai_response = ""
     aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
 
-    # Set up the ai class And promt
+    # Set up the ai class And prompt
     robot = ai_class()
     robot.set_ai_prompt(aiprompt)
 
