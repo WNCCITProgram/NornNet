@@ -12,11 +12,13 @@ load_dotenv()
 # ------------------------- LOCAL OR PRODUCTION LOCATION ------------------------------ #
 # Uncomment for Local development Constant
 # LOCATION = ""
-# Uncomment for production Waitress server 
+# Uncomment for production Waitress server
 LOCATION = "/nornnet"
 
-# Set up logging (file only, no console output)
-logger = setup_logger('main_app', 'main_app.log', console_output=False)
+# Set up logging (file only, no console output by default)
+console_output = bool(os.getenv('HTTP_PLATFORM_PORT'))
+logger = setup_logger('main_app', 'main_app.log',
+                      console_output=console_output)
 logger.info("=== main_app.py module loaded ===")
 logger.info(f"Python executable: {os.sys.executable}")
 logger.info(f"Current working directory: {os.getcwd()}")
