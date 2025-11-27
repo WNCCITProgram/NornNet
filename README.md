@@ -28,6 +28,7 @@ Visit [NornNet](https://lab.wncc.edu/nornnet). Where the Fates Weave Destiny wit
 - [Demo Creating an App Using Ollama OpenAI Python Client](https://notes.kodekloud.com/docs/Running-Local-LLMs-With-Ollama/Building-AI-Applications/Demo-Creating-an-App-Using-Ollama-OpenAI-Python-Client)
 - [How to Create Your Own AI Chatbot Like DeepSeek with Ollama in Python Flask](https://www.codewithfaraz.com/python/112/how-to-create-your-own-ai-chatbot-like-deepseek-with-ollama-in-python-flask)
 - [Learn Ollama in 15 Minutes - Run LLM Models Locally for FREE](https://youtu.be/UtSSMs6ObqY)
+- [How To Prompt AI in 2026 (according to experts)-NetworkChuck](https://www.youtube.com/watch?v=pwWBcsxEoLk)
 
 ## Personal Research
 
