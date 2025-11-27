@@ -13,7 +13,8 @@ path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Set up logging BEFORE importing main_app
 from app_logging import setup_logger
-logger = setup_logger('waitress_app', 'waitress_app.log', console_output=False)
+is_iis = bool(os.getenv('HTTP_PLATFORM_PORT'))
+logger = setup_logger('waitress_app', 'waitress_app.log', console_output=is_iis)
 logger.info(f"=== Waitress startup at {os.getpid()} ===")
 logger.info(f"Current working directory: {os.getcwd()}")
 logger.info(f"Python version: {sys.version}")

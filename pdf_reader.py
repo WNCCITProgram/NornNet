@@ -1,28 +1,34 @@
-# pip install pdfreader
-from pdfreader import SimplePDFViewer
 import os
+try:
+    # Optional dependency; install with `pip install pdfreader` if you need PDF parsing
+    from pdfreader import SimplePDFViewer
+except Exception:
+    SimplePDFViewer = None
 
-# This file is for computer reading only it is hard for people to read
+
 def read_pdf(file_path):
-    # Variables
+    """Read text from `file_path` using pdfreader when available.
+
+    Returns an empty string if pdfreader is not installed or the file is missing.
+    """
     pdf_full_text = ""
-
-    # Check if file exists
     if not os.path.exists(file_path):
-        print(f"File {file_path} does not exist.")
-        return
+        print(f"PDF not found: {file_path}")
+        return pdf_full_text
 
-    # Open the pdf file
-    fd = open("student-handbook-25-26.pdf", "rb")
-    viewer = SimplePDFViewer(fd)
+    if SimplePDFViewer is None:
+        print("pdfreader package not installed; skipping PDF parsing.")
+        return pdf_full_text
 
-    for canvas in viewer:
-        viewer.render()
-        text = viewer.canvas.text_content
-        pdf_full_text += text + " "
-
-    # close the file
-    fd.close()
+    try:
+        with open(file_path, "rb") as fd:
+            viewer = SimplePDFViewer(fd)
+            for canvas in viewer:
+                viewer.render()
+                text = getattr(viewer.canvas, 'text_content', '')
+                pdf_full_text += (text or '') + " "
+    except Exception as e:
+        print(f"Error reading PDF {file_path}: {e}")
 
     return pdf_full_text
 

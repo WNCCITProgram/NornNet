@@ -40,9 +40,6 @@ ehthumbs.db
 Desktop.ini
 web.config
 
-# Recycle / temp
-recycle.ps1
-
 # Node modules (if present)
 node_modules/
 

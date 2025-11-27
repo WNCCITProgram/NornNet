@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint, render_template, request, jsonify, abort
 from ai_class import ai_class, AVAILABLE_MODELS, MODEL
+import pdf_reader
 from app_logging import setup_logger
 import os
 import requests
@@ -11,11 +12,13 @@ load_dotenv()
 # ------------------------- LOCAL OR PRODUCTION LOCATION ------------------------------ #
 # Uncomment for Local development Constant
 # LOCATION = ""
-# Uncomment for production Waitress server 
+# Uncomment for production Waitress server
 LOCATION = "/nornnet"
 
-# Set up logging (file only, no console output)
-logger = setup_logger('main_app', 'main_app.log', console_output=False)
+# Set up logging (file only, no console output by default)
+console_output = bool(os.getenv('HTTP_PLATFORM_PORT'))
+logger = setup_logger('main_app', 'main_app.log',
+                      console_output=console_output)
 logger.info("=== main_app.py module loaded ===")
 logger.info(f"Python executable: {os.sys.executable}")
 logger.info(f"Current working directory: {os.getcwd()}")
@@ -34,9 +37,11 @@ def hello():
     # set up the input variables for the user and ai
     user_input = ""
     ai_response = ""
+    aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
 
-    # Set up the ai class
+    # Set up the ai class And prompt
     robot = ai_class()
+    robot.set_ai_prompt(aiprompt)
 
     if request.method == "POST":
         try:
