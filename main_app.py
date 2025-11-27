@@ -37,11 +37,11 @@ def hello():
     # set up the input variables for the user and ai
     user_input = ""
     ai_response = ""
-    aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
+    # aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
 
     # Set up the ai class And prompt
     robot = ai_class()
-    robot.set_ai_prompt(aiprompt)
+    # robot.set_ai_prompt(aiprompt)
 
     if request.method == "POST":
         try:
