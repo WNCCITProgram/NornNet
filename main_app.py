@@ -26,9 +26,9 @@ logger.info(f"Current working directory: {os.getcwd()}")
 # ------------------------------ RUN LOCALLY OR ON SERVER ------------------------------ #
 # Create a Blueprint with /nornnet as the URL prefix
 # To run locally: Uncomment the first one, Comment the second one
-nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/', template_folder='templates')
-# nornnet_bp = Blueprint('nornnet', __name__,
-#                       url_prefix=LOCATION, template_folder='templates')
+# nornnet_bp = Blueprint('nornnet', __name__, url_prefix='/', template_folder='templates')
+nornnet_bp = Blueprint('nornnet', __name__,
+                       url_prefix=LOCATION, template_folder='templates')
 
 
 @nornnet_bp.route("/", methods=["GET", "POST"])
