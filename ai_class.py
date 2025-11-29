@@ -61,6 +61,7 @@ class ai_class():
         self.ai_response = ""
         self.user_question = ""
         self.ai_prompt = ""
+        self.chat_log = ""
         # Use provided model or fall back to default MODEL constant
         self.model = model if model else MODEL
 
@@ -84,22 +85,23 @@ class ai_class():
             
             # JOE SCOTT 11/12/2025: CHAT HISTORY IS LOGGED HERE
             messages = []
+            
+            messages.append({
+                # System prompt to set AI behavior 
+                "role": "system",
+                "content": "You are an ai teacher that is going to answer questions based on the prompt provided: " + self.ai_prompt
+            })
+
+            # Include chat history
             if self.memory_enabled and self.chat_log:
                 messages.extend(self.chat_log)
 
-            messages=[
-                    # System prompt to set AI behavior 
-                    {
-                        "role": "system",
-                        "content": "You are an ai teacher that is going to answer questions based on the prompt provided: " + self.ai_prompt
-                    },
-                    # User question
-                    {
-                        "role": "user",
-                        "content": self.user_question
-                    }
-                ]
-            
+            # User question
+            messages.append({
+                "role": "user",
+                "content": self.user_question
+            })
+
             self.ai_response = ollama.chat(
                 model=self.model,  # Use instance model instead of global MODEL
                 messages=messages,
@@ -121,6 +123,8 @@ class ai_class():
             else:
                 content = "Sorry, something went wrong."
 
+            content = self.ai_response.get("message", {}).get("content", "Sorry, something went wrong.")
+
             # Save to chat log
             if self.memory_enabled:
                 self.chat_log.append({"role": "user", "content": self.user_question})
@@ -133,6 +137,8 @@ class ai_class():
             error_msg = f"Ollama connection error: {str(e)}"
             print(error_msg)  # This will go to waitress_app.log
             return f"Error: Could not connect to NornNet server. ({str(e)})"
+        
+        
 
     def get_ai_prompt(self):
         return self.ai_prompt

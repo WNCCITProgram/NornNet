@@ -33,14 +33,16 @@ nornnet_bp = Blueprint('nornnet', __name__,
 
 @nornnet_bp.route("/", methods=["GET", "POST"])
 def hello():
+    # Get chat logs
     # Get post is for the user input and ai response
     # set up the input variables for the user and ai
     user_input = ""
     ai_response = ""
     # aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
+    
 
-    # Set up the ai class And prompt
-    robot = ai_class()
+    
+    
     # robot.set_ai_prompt(aiprompt)
 
     if request.method == "POST":
@@ -125,7 +127,16 @@ def chat():
             return jsonify({"reply": "Please enter a message."}), 400
 
         # Create AI instance with selected model (or default if None)
-        robot = ai_class(model=selected_model)
+        """
+            Joe Scott, 11/28/2025
+            I commented the ai_class(model=selected_model) bit because
+            it was overwritting the chat_logs in the ai class by recreating
+            the class object.
+
+            Program works fine without this bit, but I'm unsure what all it
+            impacts.
+        """
+        # robot = ai_class(model=selected_model)
         robot.set_user_question(user_message)
         ai_reply = robot.get_ai_response()
 
@@ -201,4 +212,6 @@ def internal_error(error):
 
 if __name__ == "__main__":
     logger.info("Starting Flask development server")
+    # Set up the ai class And prompt
+    robot = ai_class()
     app.run(debug=True)
