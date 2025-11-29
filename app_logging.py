@@ -33,44 +33,52 @@ def setup_logger(logger_name, log_filename, console_output=False):
     Returns:
         logging.Logger: Configured logger instance
     """
-    # Get the absolute path to this script's directory
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     log_dir = os.path.join(script_dir, "logs")
     log_file = os.path.join(log_dir, log_filename)
-
-    # Ensure logs directory exists
     os.makedirs(log_dir, exist_ok=True)
 
-    # Get or create the logger
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)
-
-    # Clear any existing handlers from this logger
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
 
-    # Use custom FlushingTimedRotatingFileHandler for daily rotation with immediate flush
-    file_handler = FlushingTimedRotatingFileHandler(
-        log_file, when="midnight", interval=1, backupCount=7, encoding="utf-8", delay=True
-    )
-
-    # Set formatter
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
+    file_handler = None
+    handler_type = "FlushingTimedRotatingFileHandler"
+    try:
+        file_handler = FlushingTimedRotatingFileHandler(
+            log_file, when="midnight", interval=1, backupCount=7, encoding="utf-8", delay=True
+        )
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+        logger.debug("Attached FlushingTimedRotatingFileHandler successfully.")
+    except Exception as e:
+        # Fallback to RotatingFileHandler if custom handler fails
+        handler_type = "RotatingFileHandler (fallback)"
+        try:
+            file_handler = logging.handlers.RotatingFileHandler(
+                log_file, maxBytes=5*1024*1024, backupCount=7, encoding="utf-8", delay=True
+            )
+            file_handler.setFormatter(formatter)
+            logger.addHandler(file_handler)
+            logger.error(f"Failed to attach FlushingTimedRotatingFileHandler: {e}. Using fallback RotatingFileHandler.")
+        except Exception as e2:
+            logger.critical(f"Failed to attach any file handler: {e2}")
 
-    # Add console handler if requested
     if console_output:
-        console_handler = logging.StreamHandler()
-        console_handler.setFormatter(formatter)
-        logger.addHandler(console_handler)
+        try:
+            console_handler = logging.StreamHandler()
+            console_handler.setFormatter(formatter)
+            logger.addHandler(console_handler)
+            logger.debug("Console handler attached.")
+        except Exception as e:
+            logger.error(f"Failed to attach console handler: {e}")
 
-    # Prevent propagation to root logger
     logger.propagate = False
-
-    # Log initialization
-    logger.info(f"=== Logger '{logger_name}' initialized ===")
+    logger.info(f"=== Logger '{logger_name}' initialized ({handler_type}) ===")
     logger.info(f"Log file: {log_file}")
     logger.info(f"Console output: {console_output}")
-
+    logger.debug(f"Logger handlers: {[type(h).__name__ for h in logger.handlers]}")
     return logger

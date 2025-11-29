@@ -15,6 +15,7 @@ load_dotenv()
 # Uncomment for production Waitress server
 LOCATION = "/nornnet"
 
+# ------------------------------ LOGGER SETUP ----------------------------------------- #
 # Set up logging (file only, no console output by default)
 console_output = bool(os.getenv('HTTP_PLATFORM_PORT'))
 logger = setup_logger('main_app', 'main_app.log',
@@ -22,6 +23,9 @@ logger = setup_logger('main_app', 'main_app.log',
 logger.info("=== main_app.py module loaded ===")
 logger.info(f"Python executable: {os.sys.executable}")
 logger.info(f"Current working directory: {os.getcwd()}")
+
+# Initialize the AI class instance at module level so all routes can use it
+robot = ai_class()
 
 # ------------------------------ RUN LOCALLY OR ON SERVER ------------------------------ #
 # Create a Blueprint with /nornnet as the URL prefix
@@ -39,10 +43,7 @@ def hello():
     user_input = ""
     ai_response = ""
     # aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
-    
 
-    
-    
     # robot.set_ai_prompt(aiprompt)
 
     if request.method == "POST":
@@ -212,6 +213,4 @@ def internal_error(error):
 
 if __name__ == "__main__":
     logger.info("Starting Flask development server")
-    # Set up the ai class And prompt
-    robot = ai_class()
     app.run(debug=True)
