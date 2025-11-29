@@ -20,6 +20,14 @@ class FlushingTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler
         if self.stream:
             self.stream.flush()
 
+    def doRollover(self):
+        # Explicitly close the stream before rollover to release file lock (Windows/IIS issue)
+        if self.stream:
+            self.stream.flush()
+            self.stream.close()
+            self.stream = None
+        super().doRollover()
+
 
 def setup_logger(logger_name, log_filename, console_output=False):
     """
