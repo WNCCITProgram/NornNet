@@ -9,6 +9,7 @@
 from flask import Flask, Blueprint, render_template, request, jsonify, abort
 from ai_class import ai_class, AVAILABLE_MODELS, MODEL
 # import pdf_reader
+import Handbook
 from app_logging import setup_logger
 import os
 import requests
@@ -51,9 +52,8 @@ def hello():
     user_input = ""
     ai_response = ""
     # Reading the pdf each time is inefficient, takes way too much time
-    # aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
-
-    # robot.set_ai_prompt(aiprompt)
+    aiprompt = Handbook.handbook_text
+    robot.set_ai_prompt(aiprompt)
 
     if request.method == "POST":
         try:
