@@ -82,3 +82,54 @@ def setup_logger(logger_name, log_filename, console_output=False):
     logger.info(f"Console output: {console_output}")
     logger.debug(f"Logger handlers: {[type(h).__name__ for h in logger.handlers]}")
     return logger
+
+
+def reopen_file_handlers(logger: logging.Logger) -> dict:
+    """
+    Attempt to close and reopen any file-based handlers attached to the provided logger.
+
+    Returns a dict with results for each handler.
+    """
+    results = {}
+    for i, handler in enumerate(list(logger.handlers)):
+        name = type(handler).__name__
+        key = f"handler_{i}_{name}"
+        results[key] = {"type": name}
+        try:
+            if hasattr(handler, "baseFilename"):
+                filename = getattr(handler, "baseFilename")
+                results[key]["baseFilename"] = filename
+                try:
+                    handler.flush()
+                except Exception:
+                    pass
+                try:
+                    handler.close()
+                except Exception as e:
+                    results[key]["close_error"] = str(e)
+                try:
+                    logger.removeHandler(handler)
+                except Exception:
+                    pass
+
+                # Recreate a FlushingTimedRotatingFileHandler if possible
+                try:
+                    newh = FlushingTimedRotatingFileHandler(filename, when="midnight", interval=1, backupCount=7, encoding="utf-8", delay=True)
+                    newh.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+                    logger.addHandler(newh)
+                    results[key]["reopened"] = True
+                except Exception as e:
+                    # Fallback to RotatingFileHandler
+                    try:
+                        newh = logging.handlers.RotatingFileHandler(filename, maxBytes=5*1024*1024, backupCount=7, encoding="utf-8", delay=True)
+                        newh.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+                        logger.addHandler(newh)
+                        results[key]["reopened"] = "rotating_fallback"
+                    except Exception as e2:
+                        results[key]["reopened"] = False
+                        results[key]["reopen_error"] = f"{e}; fallback: {e2}"
+            else:
+                results[key]["note"] = "not a file handler"
+        except Exception as e:
+            results[key]["error"] = str(e)
+    return results
