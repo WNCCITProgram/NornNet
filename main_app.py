@@ -27,6 +27,9 @@ logger.info(f"Current working directory: {os.getcwd()}")
 nornnet_bp = Blueprint('nornnet', __name__,
                        url_prefix=LOCATION, template_folder='templates')
 
+# Set up the ai class as a global variable to maintain chat history
+robot= ai_class()
+robot.load_memory()  # Load previous chat log if exists
 
 @nornnet_bp.route("/", methods=["GET", "POST"])
 def hello():
@@ -35,13 +38,10 @@ def hello():
     user_input = ""
     ai_response = ""
 
-    # Set up the ai class
-    robot = ai_class()
-
     if request.method == "POST":
         try:
             user_input = request.form["user_input"]
-            logger.info(f"User question: {user_input}")
+            logger.info(f"User question: {user_input}") 
             robot.set_user_question(user_input)
             ai_response = robot.get_ai_response()
             logger.info(f"AI response generated successfully")
@@ -100,6 +100,7 @@ def chat():
         turnstile_token = request.json.get('cf-turnstile-response', None)
         # Validate Turnstile if secret configured
         turnstile_secret = os.getenv('TURNSTILE_SECRET')
+        
         if turnstile_secret:
             if not turnstile_token:
                 logger.warning('Missing Turnstile token in chat request')
@@ -120,7 +121,7 @@ def chat():
             return jsonify({"reply": "Please enter a message."}), 400
 
         # Create AI instance with selected model (or default if None)
-        robot = ai_class(model=selected_model)
+        #robot = ai_class(model=selected_model) CAN"T DO THIS. NEW INSTANCE KILLS HISTORY
         robot.set_user_question(user_message)
         ai_reply = robot.get_ai_response()
 
@@ -154,6 +155,7 @@ def inject_globals():
     # Provide the current year to templates for footer
     from datetime import datetime
     # Provide Turnstile site key (optional) so templates can render the widget
+    
     turnstile_site_key = os.getenv('TURNSTILE_SITE_KEY', '')
     turnstile_enabled = bool(os.getenv('TURNSTILE_SECRET')
                              ) and bool(turnstile_site_key)
@@ -163,6 +165,7 @@ def inject_globals():
         turnstile_enabled=turnstile_enabled
     )
 
+    
 
 @app.before_request
 def log_request():

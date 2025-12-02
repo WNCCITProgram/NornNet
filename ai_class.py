@@ -84,9 +84,17 @@ class ai_class():
             
             # JOE SCOTT 11/12/2025: CHAT HISTORY IS LOGGED HERE
             messages = []
+            
+            # SYSTEM INSTRUCTIONS (always first)
+            messages.append({
+                "role": "system",
+                "content": "You are an ai teacher that answers questions based on the conversation."
+            })
             if self.memory_enabled and self.chat_log:
                 messages.extend(self.chat_log)
+            """
 
+            
             messages=[
                     # System prompt to set AI behavior 
                     {
@@ -99,8 +107,15 @@ class ai_class():
                         "content": self.user_question
                     }
                 ]
+            """
+
+            # Add the new user question LAST (VERY IMPORTANT)
+            messages.append({
+                "role": "user",
+                "content": self.user_question
+            })
             
-            self.ai_response = ollama.chat(
+            response = ollama.chat(
                 model=self.model,  # Use instance model instead of global MODEL
                 messages=messages,
                 options={
@@ -116,8 +131,8 @@ class ai_class():
             )
 
             # Checks if the AI gave the user output
-            if 'message' in self.ai_response:
-                content = self.ai_response['message']['content']
+            if 'message' in response:
+                content = response['message']['content']
             else:
                 content = "Sorry, something went wrong."
 
@@ -125,6 +140,7 @@ class ai_class():
             if self.memory_enabled:
                 self.chat_log.append({"role": "user", "content": self.user_question})
                 self.chat_log.append({"role": "assistant", "content": content})
+                self.save_memory()  # Save chat log to file
 
             return content
         
@@ -166,7 +182,7 @@ class ai_class():
         else:
             self.chat_log = []
 
-
+""""
 def main():
     robot = ai_class()
     robot.set_user_question("HELLO")
@@ -186,3 +202,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+"""
