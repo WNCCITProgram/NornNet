@@ -1,16 +1,8 @@
-"""
-    Name: main_app.py
-    Author:
-    Created:
-    Purpose: Flask web application for NornNet AI chatbot.
-    Sets up routes, logging, and integrates with ai_class for AI responses.
-"""
-
 from flask import Flask, Blueprint, render_template, request, jsonify, abort
 from ai_class import ai_class, AVAILABLE_MODELS, MODEL
 # import pdf_reader
-import Handbook
 from app_logging import setup_logger
+from app_logging import reopen_file_handlers
 import os
 import requests
 from dotenv import load_dotenv
@@ -52,8 +44,9 @@ def hello():
     user_input = ""
     ai_response = ""
     # Reading the pdf each time is inefficient, takes way too much time
-    aiprompt = Handbook.handbook_text
-    robot.set_ai_prompt(aiprompt)
+    # aiprompt = pdf_reader.read_pdf("student-handbook-25-26.pdf")
+
+    # robot.set_ai_prompt(aiprompt)
 
     if request.method == "POST":
         try:
@@ -84,6 +77,19 @@ def get_models():
     except Exception as e:
         logger.error(f"Models endpoint error: {e}")
         return jsonify({"models": [], "default": MODEL}), 500
+
+
+# Internal log test endpoint — call this to force the app to write a test log entry.
+# Accessible at /nornnet/__log_test. Intended for debugging only.
+@nornnet_bp.route('/__log_test', methods=['GET'])
+def __log_test():
+    try:
+        logger.info('INTERNAL LOG TEST: info entry')
+        logger.debug('INTERNAL LOG TEST: debug entry')
+        return jsonify({'status': 'ok', 'message': 'log entries written'}), 200
+    except Exception as e:
+        # If logging itself fails, return the exception so we can diagnose
+        return jsonify({'status': 'error', 'error': str(e)}), 500
 
 
 def validate_turnstile(token: str, secret: str, remoteip: str = None) -> dict:
@@ -161,6 +167,34 @@ def chat():
 @nornnet_bp.route('/docs')
 def docs():
     return render_template('docs.html')
+
+
+@nornnet_bp.route('/__log_status', methods=['GET'])
+def __log_status():
+    """Return status of logger handlers (debug endpoint)."""
+    try:
+        handlers = []
+        for h in logger.handlers:
+            info = {"type": type(h).__name__}
+            if hasattr(h, 'baseFilename'):
+                info['baseFilename'] = getattr(h, 'baseFilename')
+            if hasattr(h, 'stream'):
+                info['stream_open'] = bool(getattr(h, 'stream'))
+            handlers.append(info)
+        return jsonify({'ok': True, 'handlers': handlers}), 200
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)}), 500
+
+
+@nornnet_bp.route('/__log_reopen', methods=['POST'])
+def __log_reopen():
+    """Attempt to close and reopen file handlers for the running logger."""
+    try:
+        results = reopen_file_handlers(logger)
+        logger.info("__log_reopen executed")
+        return jsonify({'ok': True, 'results': results}), 200
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)}), 500
 
 
 # Create the Flask app and serve static files under the /cs prefix so
