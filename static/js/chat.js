@@ -1,0 +1,189 @@
+// Chat functionality for NornNet
+
+// Fallback: define getBasePath locally if not provided by base.html yet
+if (typeof getBasePath !== 'function') {
+  function getBasePath() {
+    const path = window.location.pathname || '';
+    return path.startsWith('/nornnet') ? '/nornnet' : '';
+  }
+}
+
+// Detect if Turnstile is enabled by checking for the widget or API presence
+function isTurnstileEnabled() {
+  return (typeof turnstile !== 'undefined') || !!document.querySelector('.cf-turnstile');
+}
+
+/*
+  Helper Function: getTimestamp()
+  PURPOSE: Create a readable timestamp for chat messages.
+  1. Create new Date() object
+  2. Convert time to string format "HH:MM AM/PM".
+  3. Return the formatted time.
+*/
+function getTimestamp() {
+  const now = new Date();
+  return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+/*
+  Function: sendMessage()
+  PURPOSE: Handles the complete process of sending the message from the user to the Flask backend
+           and displaying both the user and AI messages in the chat window
+  
+  Features include:
+    Functional sendMessage()
+    Typing Indicator
+    Enter Key Support
+    Basic Error Handling
+    Timestamp Display
+    Smooth Scroll Animation
+*/
+
+// Typewriter effect for NornNet responses
+function typeWriterEffect(element, text, speed = 25) {
+  let i = 0;
+
+  function type() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      document.getElementById("chatbox").scrollTop =
+        document.getElementById("chatbox").scrollHeight;
+      setTimeout(type, speed);
+    }
+  }
+  type();
+}
+
+async function sendMessage() {
+  // Capture input and chatbox references
+  const userInput = document.getElementById("user_input");
+  const chatbox = document.getElementById("chatbox");
+  const message = userInput.value.trim();
+
+  // Skip empty messages
+  if (!message) return;
+
+  // Display user's message + timestamp
+  chatbox.innerHTML += `
+    <div style="margin-bottom: 8px;">
+      <strong>You:</strong> ${message}
+      <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
+    </div>`;
+
+  // Clear input 
+  userInput.value = "";
+
+  // Smooth scroll to bottom
+  chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+
+  // Add typing indicator (user feedback while AI is responding)
+  const typingIndicator = document.createElement("div");
+  typingIndicator.id = "typing";
+  typingIndicator.innerHTML = "<em>NornNet is weaving your fate...</em>";
+  chatbox.appendChild(typingIndicator);
+  chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+
+  try {
+    // Get selected model from dropdown
+    const modelSelect = document.getElementById("model_select");
+    const selectedModel = modelSelect.value;
+
+    // If Turnstile is enabled, ensure token exists
+    if (isTurnstileEnabled() && window._turnstile_token === null) {
+      // No token yet
+      chatbox.removeChild(typingIndicator);
+      chatbox.innerHTML += `<div style="color:red; margin-bottom: 8px;"><strong>Verification required:</strong> Please complete the bot check above before sending.</div>`;
+      chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+      return;
+    }
+
+    // Send POST request to FLASK backend (/chat endpoint) with selected model
+    const response = await fetch(`${getBasePath()}/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: message,
+        model: selectedModel,  // Include selected model in request
+        'cf-turnstile-response': window._turnstile_token || null
+      }),
+    });
+
+    // Parse reply
+    const data = await response.json();
+
+    // Remove typing indicator
+    chatbox.removeChild(typingIndicator);
+
+    // Check if the response was successful or if validation failed
+    if (!response.ok) {
+      // Validation failed or other error - show error message
+      chatbox.innerHTML += `
+        <div style="color:red; margin-bottom: 8px;">
+          <strong>Norn:</strong> ${data.reply || 'An error occurred'}
+          <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
+        </div>`;
+      chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+
+      // Reset Turnstile widget so user can try again with fresh token
+      if (typeof turnstile !== 'undefined') {
+        const turnstileWidget = document.querySelector('.cf-turnstile');
+        if (turnstileWidget) {
+          turnstile.reset(turnstileWidget);
+          window._turnstile_token = null;
+        }
+      }
+      return;
+    }
+
+    // Typewriter response
+    const botContainer = document.createElement("div");
+    botContainer.style.marginBottom = "8px";
+
+    const botLabel = document.createElement("strong");
+    botLabel.textContent = "Norn: ";
+    botContainer.appendChild(botLabel);
+
+    // Empty element where text will animate
+    const botMessage = document.createElement("span");
+    botContainer.appendChild(botMessage);
+
+    // Timestamp 
+    const botTime = document.createElement("div");
+    botTime.style.fontSize = "0.75em";
+    botTime.style.color = "grey";
+    botTime.textContent = getTimestamp();
+
+    // Add everything to chatbox
+    chatbox.appendChild(botContainer);
+    chatbox.appendChild(botTime);
+
+    // Start typewriter animation
+    typeWriterEffect(botMessage, data.reply, 18);
+
+    // Smooth scroll animation to latest message
+    chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+
+    // Reset Turnstile widget for next message (if enabled) - only on success
+    if (typeof turnstile !== 'undefined' && window._turnstile_token !== null) {
+      // Find the widget ID (Turnstile assigns this automatically)
+      const turnstileWidget = document.querySelector('.cf-turnstile');
+      if (turnstileWidget) {
+        // Reset the widget to get a fresh token for the next message
+        turnstile.reset(turnstileWidget);
+        window._turnstile_token = null; // Clear the token
+      }
+    }
+
+  } catch (error) {
+    // Handle any backend or network errors gracefully
+    console.error("Chat Error:", error);
+    chatbox.removeChild(typingIndicator);
+    chatbox.innerHTML += `
+      <div style="color:red; margin-bottom: 8px;">
+        <strong>Error:</strong> Could not connect to NornNet server.
+        <div style="font-size: 0.75em; color: grey;">${getTimestamp()}</div>
+      </div>`;
+    chatbox.scrollTo({ top: chatbox.scrollHeight, behavior: 'smooth' });
+  }
+}
