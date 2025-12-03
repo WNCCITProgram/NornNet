@@ -47,7 +47,8 @@ enumerate_models()
 # This is the best model for CPU inference.
 # Context Window: 128K tokens (huge!)
 # Why Best: Specifically designed for RAG with massive context window, excellent at following instructions and not adding information beyond context
-MODEL = "llama3.1:8b-instruct-q4_K_M"
+# MODEL = "llama3.1:8b-instruct-q4_K_M"
+MODEL = "ministral-3:latest"
 
 # Memory Optimization Notes:
 # The ollama.chat() options parameter supports memory-mapped I/O (use_mmap=True)
@@ -90,7 +91,7 @@ class ai_class():
             messages.append({
                 # System prompt to set AI behavior 
                 "role": "system",
-                "content": "You are an ai teacher that is going to answer questions based on the Handbook provided: " + self.ai_prompt
+                "content": "You are an expert ai and computar science teacher who is good at using analogiegs to explain concepts: " + self.ai_prompt
             })
 
             # Include chat history
