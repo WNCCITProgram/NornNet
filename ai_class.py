@@ -11,6 +11,7 @@
 # no anyway.
 
 import ollama
+import Handbook
 
 # Cache available models at module load
 AVAILABLE_MODELS = []
@@ -46,7 +47,8 @@ enumerate_models()
 # This is the best model for CPU inference.
 # Context Window: 128K tokens (huge!)
 # Why Best: Specifically designed for RAG with massive context window, excellent at following instructions and not adding information beyond context
-MODEL = "llama3.1:8b-instruct-q4_K_M"
+# MODEL = "llama3.1:8b-instruct-q4_K_M"
+MODEL = "ministral-3:latest"
 
 # Memory Optimization Notes:
 # The ollama.chat() options parameter supports memory-mapped I/O (use_mmap=True)
@@ -89,7 +91,7 @@ class ai_class():
             messages.append({
                 # System prompt to set AI behavior 
                 "role": "system",
-                "content": "You are an ai teacher that is going to answer questions based on the prompt provided: " + self.ai_prompt
+                "content": "You are an expert ai and computar science teacher who is good at using analogiegs to explain concepts: " + self.ai_prompt
             })
 
             # Include chat history
@@ -175,9 +177,9 @@ class ai_class():
 
 def main():
     robot = ai_class()
-    robot.set_user_question("HELLO")
+    robot.set_user_question("What is the handbook you have about?")
     # Get ai prompt currently nothing since this is a test
-    robot.set_ai_prompt("NOTHING")
+    robot.set_ai_prompt(Handbook.text)
 
     print(robot.get_user_question())
 

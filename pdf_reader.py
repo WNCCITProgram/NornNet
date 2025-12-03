@@ -19,18 +19,26 @@ def read_pdf(file_path):
     if SimplePDFViewer is None:
         print("pdfreader package not installed; skipping PDF parsing.")
         return pdf_full_text
+    
+    plain_text = """"""
 
     try:
         with open(file_path, "rb") as fd:
             viewer = SimplePDFViewer(fd)
             for canvas in viewer:
                 viewer.render()
-                text = getattr(viewer.canvas, 'text_content', '')
-                pdf_full_text += (text or '') + " "
+                plain_text += "".join(viewer.canvas.strings)
+                viewer.next()
     except Exception as e:
         print(f"Error reading PDF {file_path}: {e}")
 
-    return pdf_full_text
+    formattted_text = formatter(plain_text, delimiter='.', replacement='\n')    
+
+    return formattted_text
+
+def formatter(text, delimiter='. ', replacement='\n'):
+    stream = (f'{token.strip()}{delimiter}' for token in text.split(delimiter) if token) 
+    return replacement.join(stream)
 
 
 def main():
