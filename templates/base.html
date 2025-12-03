@@ -12,42 +12,37 @@
 
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-  <!-- Inline helpers moved to static/css/styles.css -->
-</head>
+  </head>
 
 <body>
-  <div class="page-wrapper">
+  <div class="page-wraFpper">
 
     <!-- HEADER -->
-    <nav class="navbar navbar-expand-lg navbar-light shadow-sm"
-      style="background: #667eea;">
-      <div class="container">
-        <a class="navbar-brand text-white fw-bold" href="{{ url_for('nornnet.hello') }}"
-          style="font-size: 1.5rem; letter-spacing: 0.5px;">
-          <span style="text-shadow: 0 2px 4px rgba(0,0,0,0.2);">NornNet</span>
-        </a>
+    <div class="navbar-wrapper">
+      <nav class="navbar navbar-expand-lg navbar-light shadow-sm nornnet-navbar">
+        <div class="container-fluid">
+          <a class="navbar-brand text-white fw-bold nornnet-brand" href="{{ url_for('nornnet.hello') }}">
+            <span>NornNet</span>
+          </a>
 
-        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
-        </button>
+          <button class="navbar-toggler border-0 text-white nornnet-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
             <li class="nav-item">
               <div class="d-flex align-items-center bg-white bg-opacity-10 rounded-pill px-3 py-2 backdrop-blur">
                 <label for="model_select" class="text-white text-nowrap me-2 mb-0 small opacity-75">AI Model</label>
-                <select id="model_select"
-                  class="form-select form-select-sm border-0 bg-white bg-opacity-25 text-white rounded-pill"
-                  style="min-width: 180px; backdrop-filter: blur(10px);">
+                <select id="model_select" class="form-select form-select-sm border-0 bg-white bg-opacity-25 text-white rounded-pill">
                   <option value="">Loading...</option>
                 </select>
               </div>
             </li>
 
             <li class="nav-item">
-              <button id="darkModeToggle" class="btn btn-sm btn-light rounded-pill px-3 shadow-sm"
-                style="backdrop-filter: blur(10px);">
+              <button id="darkModeToggle" class="btn btn-sm btn-light rounded-pill px-3 shadow-sm">
                 <span class="d-flex align-items-center gap-1">
                   <span>🌙</span>
                   <span class="small">Dark</span>
@@ -56,13 +51,11 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white px-3" href="{{ url_for('nornnet.docs') }}"
-                style="transition: all 0.3s;">Docs</a>
+              <a class="nav-link text-white px-3 nornnet-nav-link" href="{{ url_for('nornnet.docs') }}">Docs</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white px-3" href="https://github.com/WNCCITProgram/NornNet" target="_blank"
-                style="transition: all 0.3s;">
+              <a class="nav-link text-white px-3 nornnet-nav-link" href="https://github.com/WNCCITProgram/NornNet" target="_blank">
                 <span class="d-flex align-items-center gap-2">
                   <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path
@@ -74,15 +67,13 @@
             </li>
           </ul>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
 
     <!-- MAIN CONTENT -->
     <main class="site-main">
-      <div class="container-fluid">
-        <div class="container d-flex justify-content-center">
-          {% block content %}{% endblock %}
-        </div>
+      <div class="container main-container">
+        {% block content %}{% endblock %}
       </div>
     </main>
 
@@ -111,60 +102,8 @@
   </script>
   {%- endif %}
 
-  <script>
-    // Determine base path so app works at site root and under /nornnet
-    function getBasePath() {
-      const path = window.location.pathname || '';
-      return path.startsWith('/nornnet') ? '/nornnet' : '';
-    }
-
-    // Load available AI models into header dropdown
-    async function loadModels() {
-      try {
-        const response = await fetch(`${getBasePath()}/models`);
-        const data = await response.json();
-        const modelSelect = document.getElementById("model_select");
-
-        if (modelSelect && data.models && data.models.length > 0) {
-          modelSelect.innerHTML = "";
-
-          // Sort models: default model first, then alphabetically
-          const defaultModel = data.default || "llama3.1:8b-instruct-q4_K_M";
-          const sortedModels = data.models.sort((a, b) => {
-            if (a === defaultModel) return -1;
-            if (b === defaultModel) return 1;
-            return a.localeCompare(b);
-          });
-
-          sortedModels.forEach(model => {
-            const option = document.createElement("option");
-            option.value = model;
-            option.textContent = model;
-            if (model === defaultModel) {
-              option.selected = true;
-            }
-            modelSelect.appendChild(option);
-          });
-        }
-      } catch (error) {
-        console.error("Error loading models:", error);
-      }
-    }
-
-    // Load models when page loads
-    document.addEventListener("DOMContentLoaded", loadModels);
-
-    // ---------------- Dark Mode Toggle ----------------
-    const darkModeToggle = document.getElementById("darkModeToggle");
-    darkModeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-      if (document.body.classList.contains("dark-mode")) {
-        darkModeToggle.textContent = "☀️ Light Mode";
-      } else {
-        darkModeToggle.textContent = "🌙 Dark Mode";
-      }
-    });
-  </script>
+  <!-- Base JavaScript -->
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
 </body>
 
 </html>
