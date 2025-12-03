@@ -82,7 +82,7 @@ a.folder-link:hover { background: #0847c5; }
 /* Inline helpers moved from base.html to central stylesheet */
 html, body { height: 100%; }
 .page-wrapper { min-height: 100vh; display: flex; flex-direction: column; }
-.site-main { flex: 1 0 auto; display: flex; align-items: center; justify-content: center; padding: 2rem 0; }
+.site-main { flex: 1 0 auto; display: flex; flex-direction: column; padding: 1rem 0; }
 .site-footer { flex-shrink: 0; }
 
 /* ---------------------- DARK MODE STYLES ----------------------- */
@@ -139,4 +139,126 @@ body.dark-mode #chatbox {
   background-color: #1e1e1e;
   color: #e0e0e0;
   border-color: #444;
+}
+
+/* ---------------------- MODERN NAVBAR STYLES ----------------------- */
+.navbar {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.navbar-brand:hover {
+  transform: translateY(-2px);
+  transition: transform 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transform: translateY(-1px);
+}
+
+.navbar #model_select {
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.navbar #model_select:focus {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+.navbar #model_select option {
+  background-color: #667eea;
+  color: white;
+}
+
+.navbar #darkModeToggle {
+  transition: all 0.3s ease;
+}
+
+.navbar #darkModeToggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile navbar improvements */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .navbar .nav-item {
+    margin: 0.5rem 0;
+  }
+}
+
+/* ---------------------- NORNNET CHAT INTERFACE STYLES ----------------------- */
+.card.nornnet-container {
+  text-align: center;
+  padding: 20px;
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#chatbox {
+  border: 1px solid #ccc;
+  background: white;
+  padding: 10px;
+  width: 100%;
+  max-width: 1200px;
+  flex: 1;
+  min-height: 300px;
+  overflow-y: auto;
+  margin: 0 auto 10px auto;
+  text-align: left;
+}
+
+.version-label {
+  font-size: 0.75em;
+  color: grey;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+#turnstile-container {
+  margin: 10px auto;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.input-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 5px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+#user_input {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.input-container button {
+  padding: 10px 16px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }

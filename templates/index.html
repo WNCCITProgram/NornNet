@@ -4,35 +4,28 @@
 
 {% block content %}
   <!-- Page container -->
-  <div class="card" style="text-align:center; padding:20px;">
+  <div class="card nornnet-container">
     <h1>NornNet</h1>
     <p>Welcome to NornNet - Where the Fates Weave Destiny with a Touch of AI Magic</p>
 
     <!-- Chat Interface -->
-    <div id="chatbox" 
-         style="border: 1px solid #ccc; background: white; padding: 10px; 
-                width: 400px; height: 300px; overflow-y: auto; 
-                margin: 0 auto 10px auto; text-align: left;">
-    </div>
+    <div id="chatbox"></div>
 
     <!-- VERSION LABEL -->
-    <div style="font-size:0.75em; color:grey; margin-top:-5px; margin-bottom:10px;">
-      Current Version 2.0
-    </div>
+    <div class="version-label">Current Version 2.0</div>
 
     {%- if turnstile_enabled %}
     <!-- Cloudflare Turnstile widget (AJAX flow uses callback to capture token) -->
-    <div id="turnstile-container" style="margin: 10px auto; width: 400px; text-align: center;">
+    <div id="turnstile-container">
       <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-callback="onTurnstileSuccess"></div>
     </div>
     {%- endif %}
 
     <!-- User Input and Button -->
-    <div style="margin-top: 10px;">
+    <div class="input-container">
       <input type="text" id="user_input" placeholder="Ask something..." 
-             style="width: 300px; padding: 8px;"
              onkeydown="if(event.key === 'Enter') sendMessage()">
-      <button onclick="sendMessage()" style="padding: 8px 12px; margin-left: 5px;">Send</button>
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
 
