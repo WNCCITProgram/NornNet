@@ -91,7 +91,7 @@ class ai_class():
             messages.append({
                 # System prompt to set AI behavior 
                 "role": "system",
-                "content": "You are an expert computar science teacher who is good at using analogiegs to explain concepts. You also want to keep your answers short and too the point.: " + self.ai_prompt
+                "content": " " + self.ai_prompt
             })
 
             # Include chat history
