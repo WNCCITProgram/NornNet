@@ -11,7 +11,7 @@
 # no anyway.
 
 import ollama
-import Handbook
+# import Handbook
 
 # Cache available models at module load
 AVAILABLE_MODELS = []
@@ -91,7 +91,7 @@ class ai_class():
             messages.append({
                 # System prompt to set AI behavior 
                 "role": "system",
-                "content": "You are an expert ai and computar science teacher who is good at using analogiegs to explain concepts: " + self.ai_prompt
+                "content": "You are an expert computar science teacher who is good at using analogiegs to explain concepts. You also want to keep your answers short and too the point.: " + self.ai_prompt
             })
 
             # Include chat history
@@ -179,7 +179,7 @@ def main():
     robot = ai_class()
     robot.set_user_question("What is the handbook you have about?")
     # Get ai prompt currently nothing since this is a test
-    robot.set_ai_prompt(Handbook.text)
+    robot.set_ai_prompt("")
 
     print(robot.get_user_question())
 
