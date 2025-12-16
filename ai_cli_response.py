@@ -9,7 +9,7 @@ Purpose: Early version of ai implementation in python for web server
 # Added early AI context here
 
 import ollama
-import pdf_reader
+# import pdf_reader
 
 chat_log = 'CONVERSATION LOGS: "'
 
